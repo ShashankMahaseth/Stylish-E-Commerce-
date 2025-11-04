@@ -34,13 +34,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.AuthButton.AuthButton
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.LoginIcon.LoginIcon
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.TextField.TextFieldItem
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.forgetScreen.forgetPasswordButton.ForgetPasswordButton
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.forgetScreen.forgetText.ForgotText
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.registerButton.RegisterButton
-import com.example.stylishe_commerceapp.presentation.AuthPage.components.topheadertext.TopHeaderText
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.AuthButton.AuthButton
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.LoginIcon.LoginIcon
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.TextField.TextFieldItem
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetPasswordButton.ForgetPasswordButton
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetText.ForgotText
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.registerButton.RegisterButton
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.topheadertext.TopHeaderText
 
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
 import com.example.stylishe_commerceapp.core.utils.Result

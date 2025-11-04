@@ -76,6 +76,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     val nav_version = "2.9.5"
+    implementation(libs.androidx.material.icons.extended)
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")

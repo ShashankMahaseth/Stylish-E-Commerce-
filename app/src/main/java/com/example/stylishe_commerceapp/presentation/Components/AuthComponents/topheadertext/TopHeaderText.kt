@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.topheadertext
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.topheadertext
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

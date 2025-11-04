@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.LoginIcon
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.LoginIcon
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

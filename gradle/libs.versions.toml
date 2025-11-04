@@ -11,9 +11,11 @@ activityCompose = "1.11.0"
 composeBom = "2025.09.01"
 googleGmsGoogleServices = "4.4.4"
 firebaseAuth = "24.0.1"
+materialIconsExtended = "<latest_version>"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

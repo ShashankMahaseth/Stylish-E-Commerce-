@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.forgetScreen.forgetPasswordButton
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetPasswordButton
 
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton

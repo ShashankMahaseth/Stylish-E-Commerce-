@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.registerButton
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.registerButton
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

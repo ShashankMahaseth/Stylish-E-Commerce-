@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.AuthButton
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.AuthButton
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.TextField
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.TextField
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

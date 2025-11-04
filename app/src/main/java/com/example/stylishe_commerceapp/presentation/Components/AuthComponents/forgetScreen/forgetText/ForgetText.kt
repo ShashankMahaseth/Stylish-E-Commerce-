@@ -1,4 +1,4 @@
-package com.example.stylishe_commerceapp.presentation.AuthPage.components.forgetScreen.forgetText
+package com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetText
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
