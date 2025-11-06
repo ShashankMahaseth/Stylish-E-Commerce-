@@ -16,6 +16,7 @@ import com.example.stylishe_commerceapp.presentation.HomePage.HomeScreen
 
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
+import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.UserPreferencesViewModel
 
 @Composable
@@ -23,6 +24,7 @@ fun NavigationApp() {
     val context = LocalContext.current
 
     val viewModel: AuthViewModel = viewModel()
+    val productViewModel: ProductViewModel = viewModel()
 
     val userPreferencesViewModel: UserPreferencesViewModel= viewModel()
 
@@ -50,7 +52,7 @@ fun NavigationApp() {
             // Disable back button on HomeScreen
           //  BackHandler(enabled = true) { }
 
-            HomeScreen()
+            HomeScreen(productViewModel)
         }
     }
 }

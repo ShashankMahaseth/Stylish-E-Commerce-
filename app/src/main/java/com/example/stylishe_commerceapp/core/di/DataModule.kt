@@ -3,9 +3,12 @@ package com.example.stylishe_commerceapp.core.di
 
 import android.content.Context
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.AuthRepositoryImplementation
+import com.example.stylishe_commerceapp.data.RepositoryImplementation.ProductRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.UserPreferenceImplementation
 import com.example.stylishe_commerceapp.data.local.UserPreferencesDataStore
+import com.example.stylishe_commerceapp.data.service.ProductApiService
 import com.example.stylishe_commerceapp.domain.repository.AuthRepository
+import com.example.stylishe_commerceapp.domain.repository.ProductRepository
 import com.example.stylishe_commerceapp.domain.repository.UserPreferenceRepository
 import com.google.firebase.auth.FirebaseAuth
 
@@ -74,7 +77,7 @@ object DataModule {
         }
 
     }
- /*   @Provides
+   @Provides
     @Singleton
     fun provideProductApiService(httpClient: HttpClient): ProductApiService {
         return ProductApiService(httpClient)
@@ -83,7 +86,7 @@ object DataModule {
     @Singleton
     fun provideProductRepository(productApiService: ProductApiService): ProductRepository {
         return ProductRepositoryImplementation(productApiService)
-    }*/
+    }
 
     @Provides
     @Singleton
