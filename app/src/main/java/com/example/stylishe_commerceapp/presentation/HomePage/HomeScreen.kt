@@ -4,10 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,9 +17,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,26 +25,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.Banner
+import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomeCategory
-import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomeSearchBar
+import com.example.stylishe_commerceapp.presentation.common.HomeSearchBar
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomeTopAppBar
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.MoreItemComponent
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ProductCard
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ShoesCard
+import com.example.stylishe_commerceapp.presentation.Navigation.Routes
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
+import com.example.stylishe_commerceapp.presentation.common.BottomNavigationBar
+import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 
 @Composable
-fun HomeScreen(productViewModel: ProductViewModel) {
+fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) {
 
     var search by remember { mutableStateOf("") }
     Scaffold(
@@ -59,18 +59,16 @@ fun HomeScreen(productViewModel: ProductViewModel) {
             HomeTopAppBar(onListClick = {}) {//onProfileClick
 
             }
-        }
+
+        },
+        bottomBar = {BottomNavigationBar()}
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             val productState by productViewModel.products.collectAsState()
 
             when (val state = productState) {
                 is Result.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
+                    LoadingIndicator()
                 }
 
                 is Result.Success -> {
@@ -82,10 +80,24 @@ fun HomeScreen(productViewModel: ProductViewModel) {
                         item(span = { GridItemSpan(2) }) {
                             Column {
 
-                                HomeSearchBar(
-                                    value = search, onValueChanged = { search = it },
-                                    readonly = true
-                                )
+                                Box(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.Transparent)
+                                    .clickable (
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        onClick = {
+
+                                            navController.navigate(Routes.SearchScreen)
+                                        }
+                                    )) {
+                                    HomeSearchBar(
+                                        value = search,
+                                        onValueChanged = { search = it },
+                                        readonly = false,
+
+                                    )
+                                }
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = "All Featured",
@@ -112,10 +124,10 @@ fun HomeScreen(productViewModel: ProductViewModel) {
                                                 && it.category != "furniture"
                                     }.take(10)
                                     ) { products ->
-
                                         ProductCard(
                                             thumbnail = products.thumbnail,
-                                            title = products.title, price = products.price
+                                            title = products.title,
+                                            productList = products
                                         )
                                     }
                                 }
@@ -125,7 +137,7 @@ fun HomeScreen(productViewModel: ProductViewModel) {
                                     painter = painterResource(R.drawable.mac),
                                     contentDescription = null,
                                     modifier = Modifier.clickable(
-                                        onClick = {}, indication = null,
+                                        onClick = {/*onHeelClick*/}, indication = null,
                                         interactionSource = remember { MutableInteractionSource() })
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -149,13 +161,16 @@ fun HomeScreen(productViewModel: ProductViewModel) {
                             ProductCard(
                                 thumbnail = products.thumbnail,
                                 title = products.title,
-                                price = products.price
+                              
+                                productList = products
                             )
                         }
 
                         item(span = {GridItemSpan(2)}) {
                             Column {
                                 MoreItemComponent() {//onClicked
+                                    productViewModel.reset()
+                                    navController.navigate(Routes.AllProductScreen)
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
                                 ShoesCard {//onShoesClick
@@ -169,9 +184,9 @@ fun HomeScreen(productViewModel: ProductViewModel) {
                 }
 
                 is Result.Failure -> {
-                    Text(
-                        "Failure"
-                    )
+                    FailureComponent {
+                        productViewModel.reset()
+                    }
                 }
 
                 else -> {
