@@ -1,20 +1,26 @@
 package com.example.stylish.Navigation
 
+import Product
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.example.stylishe_commerceapp.data.remote.ProductDto
 
 import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.forgetpage.ForgotPage
 import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.loginpage.LoginScreen
 import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.signuppage.SignUpScreen
 import com.example.stylishe_commerceapp.presentation.AuthPage.SplashScreen.SplashScreen
 import com.example.stylishe_commerceapp.presentation.AuthPage.onboarding.OnBoardingScreen
+import com.example.stylishe_commerceapp.presentation.HomePage.AllProductScreen
 import com.example.stylishe_commerceapp.presentation.HomePage.HomeScreen
 
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
+import com.example.stylishe_commerceapp.presentation.ProductDetailsScreen.ProductDetailsScreen
+import com.example.stylishe_commerceapp.presentation.SearchScreen.SearchScreen
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.UserPreferencesViewModel
@@ -22,6 +28,7 @@ import com.example.stylishe_commerceapp.presentation.ViewModel.UserPreferencesVi
 @Composable
 fun NavigationApp() {
     val context = LocalContext.current
+
 
     val viewModel: AuthViewModel = viewModel()
     val productViewModel: ProductViewModel = viewModel()
@@ -52,8 +59,22 @@ fun NavigationApp() {
             // Disable back button on HomeScreen
           //  BackHandler(enabled = true) { }
 
-            HomeScreen(productViewModel)
+            HomeScreen(productViewModel,navController)
         }
+        composable<Routes.AllProductScreen> {
+            AllProductScreen(navController,productViewModel)
+        }
+        composable<Routes.SearchScreen> {
+            SearchScreen()
+        }
+        composable<Routes.ProductDetailScreen> { backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.ProductDetailScreen>()
+            ProductDetailsScreen(
+                viewModel = productViewModel,
+                productId = args.productId,
+                navController
+            )
+             }
     }
 }
 
