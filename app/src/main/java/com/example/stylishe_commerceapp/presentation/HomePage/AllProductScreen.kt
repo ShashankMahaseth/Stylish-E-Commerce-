@@ -15,15 +15,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.core.utils.Result
+import com.example.stylishe_commerceapp.data.remote.ProductDto
 import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 import com.example.stylishe_commerceapp.presentation.common.HomeSearchBar
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ProductCard
@@ -35,6 +39,9 @@ import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 @Composable
 fun AllProductScreen(navController: NavController, productViewModel: ProductViewModel){
     val productState by productViewModel.products.collectAsState()
+    LaunchedEffect(Unit){
+        productViewModel.getAllProducts()
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -70,8 +77,8 @@ fun AllProductScreen(navController: NavController, productViewModel: ProductView
 
                     when (val state = productState) {
                         is Result.Loading -> {
-                            LoadingIndicator()
-                        }
+                                LoadingIndicator()
+                            }
                         is Result.Success-> {
                             LazyVerticalGrid(
                                 columns = GridCells.Fixed(2)
@@ -90,7 +97,9 @@ fun AllProductScreen(navController: NavController, productViewModel: ProductView
                                         thumbnail = products.thumbnail,
                                         title = products.title,
                                         productList = products
-                                    )
+                                    ){
+                                        navController.navigate(Routes.ProductDetailScreen(productId = products.id?:0))
+                                    }
                                 }
                             }
 

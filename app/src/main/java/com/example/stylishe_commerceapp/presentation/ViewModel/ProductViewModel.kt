@@ -15,9 +15,9 @@ import javax.inject.Inject
 class ProductViewModel @Inject constructor(private val getProductUseCase: GetProductUseCase): ViewModel(){
     private val _products = MutableStateFlow<Result<ProductDto>>(Result.Idle)
     val products= _products.asStateFlow()
-init {
-    getAllProducts()
-}
+//init {
+//    getAllProducts()
+//}
     fun getAllProducts(){
         viewModelScope.launch {
             try {
@@ -30,6 +30,9 @@ init {
 
             }
         }
+    fun reset(){
+        getAllProducts()
+    }
 
     }
 

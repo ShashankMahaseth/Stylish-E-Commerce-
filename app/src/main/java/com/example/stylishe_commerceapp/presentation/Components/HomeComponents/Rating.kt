@@ -1,5 +1,6 @@
 package com.example.stylishe_commerceapp.presentation.Components.HomeComponents
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,8 +28,8 @@ import com.example.stylishe_commerceapp.R
 import kotlin.math.floor
 
 @Composable
-fun Rating(rating:Double,onSharedClick:()->Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+fun Rating(rating:Double) {
+
         Row() {
             for (i in 1..5) {
                 val fullStars =
@@ -58,15 +59,8 @@ fun Rating(rating:Double,onSharedClick:()->Unit) {
                 text = "$rating",
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
-            Spacer(modifier = Modifier.width(2.dp))
-            IconButton(onClick = onSharedClick, shape = CircleShape, modifier = Modifier.size(25.dp)) {
-                Icon(
-                    imageVector = Icons.Filled.Share,
-                    contentDescription = null,
-                    modifier = Modifier.size(23.dp)
-                )
+
             }
 
-        }
+
     }
-}

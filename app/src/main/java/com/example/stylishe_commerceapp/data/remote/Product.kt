@@ -18,7 +18,7 @@ data class Product(
     val price: Double? = null,
     val rating: Double? = null,
     val returnPolicy: String? = null,
-    val reviews: List<Review>? = emptyList(),
+    val reviews: List<Review>? = null,
     val shippingInformation: String? = null,
     val sku: String? = null,
     val stock: Int? = null,

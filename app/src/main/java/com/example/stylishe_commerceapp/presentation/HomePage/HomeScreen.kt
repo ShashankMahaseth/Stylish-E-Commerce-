@@ -20,10 +20,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,10 +49,14 @@ import com.example.stylishe_commerceapp.presentation.Navigation.Routes
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.common.BottomNavigationBar
 import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) {
-
+    LaunchedEffect(Unit){
+        productViewModel.getAllProducts()
+    }
     var search by remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -86,7 +92,7 @@ fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) 
                                     .clickable (
                                         indication = null,
                                         interactionSource = remember { MutableInteractionSource() },
-                                        onClick = {
+                                      onClick = {
 
                                             navController.navigate(Routes.SearchScreen)
                                         }
@@ -128,7 +134,9 @@ fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) 
                                             thumbnail = products.thumbnail,
                                             title = products.title,
                                             productList = products
-                                        )
+                                        ){
+                                            navController.navigate(Routes.ProductDetailScreen(productId = products.id?:0))
+                                        }
                                     }
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
@@ -163,14 +171,17 @@ fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) 
                                 title = products.title,
                               
                                 productList = products
-                            )
+                            ){
+                                navController.navigate(Routes.ProductDetailScreen(productId = products.id?:0))
+                            }
                         }
 
                         item(span = {GridItemSpan(2)}) {
                             Column {
                                 MoreItemComponent() {//onClicked
-                                    productViewModel.reset()
-                                    navController.navigate(Routes.AllProductScreen)
+
+                                        navController.navigate(Routes.AllProductScreen)
+
                                 }
                                 Spacer(modifier = Modifier.height(16.dp))
                                 ShoesCard {//onShoesClick
