@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -90,10 +91,10 @@ fun HomePage(productViewModel: ProductViewModel,navController: NavController) {
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
                             )
-                            LazyRow(modifier = Modifier.background(color = colorResource(R.color.Snow))) {
-                                items(categoryList) { category ->
+                            Row(modifier = Modifier.background(color = colorResource(R.color.Snow))) {
+
                                     HomeCategory(navController)
-                                }
+
                             }
                             Spacer(modifier = Modifier.height(8.dp))
 
