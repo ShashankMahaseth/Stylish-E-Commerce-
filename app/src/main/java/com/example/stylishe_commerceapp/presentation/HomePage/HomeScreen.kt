@@ -25,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,24 +39,22 @@ import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.Banner
 import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomeCategory
+import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomePage
 import com.example.stylishe_commerceapp.presentation.common.HomeSearchBar
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomeTopAppBar
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.MoreItemComponent
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ProductCard
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ShoesCard
+import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.categoryList
+import com.example.stylishe_commerceapp.presentation.Favorite.FavoritePage
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.common.BottomNavigationBar
 import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) {
-    LaunchedEffect(Unit){
-        productViewModel.getAllProducts()
-    }
-    var search by remember { mutableStateOf("") }
+fun HomeScreen(navController: NavController,home:@Composable ()-> Unit) {
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = colorResource(R.color.WhiteSmoke),
@@ -67,148 +64,11 @@ fun HomeScreen(productViewModel: ProductViewModel,navController: NavController) 
             }
 
         },
-        bottomBar = {BottomNavigationBar()}
+        bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            val productState by productViewModel.products.collectAsState()
-
-            when (val state = productState) {
-                is Result.Loading -> {
-                    LoadingIndicator()
-                }
-
-                is Result.Success -> {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-
-                        item(span = { GridItemSpan(2) }) {
-                            Column {
-
-                                Box(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(Color.Transparent)
-                                    .clickable (
-                                        indication = null,
-                                        interactionSource = remember { MutableInteractionSource() },
-                                      onClick = {
-
-                                            navController.navigate(Routes.SearchScreen)
-                                        }
-                                    )) {
-                                    HomeSearchBar(
-                                        value = search,
-                                        onValueChanged = { search = it },
-                                        readonly = false,
-
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "All Featured",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 28.sp
-                                )
-                                LazyRow(modifier = Modifier.background(color = colorResource(R.color.Snow))) {
-                                    item {
-                                        HomeCategory()
-                                    }
-                                }
-                                Spacer(modifier = Modifier.height(8.dp))
-
-                                Banner()
-                                Spacer(modifier = Modifier.height(8.dp))
-                                LazyRow {
-                                    items(state.data.products.filter {
-                                        it.category != "groceries" &&
-                                                it.category != "home-decoration"
-                                                && it.category != "kitchen-accessories"
-                                                && it.category != "motorcycle"
-                                                && it.category != "sports-accessories"
-                                                && it.category != "vehicle"
-                                                && it.category != "furniture"
-                                    }.take(10)
-                                    ) { products ->
-                                        ProductCard(
-                                            thumbnail = products.thumbnail,
-                                            title = products.title,
-                                            productList = products
-                                        ){
-                                            navController.navigate(Routes.ProductDetailScreen(productId = products.id?:0))
-                                        }
-                                    }
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                                Image(
-                                    painter = painterResource(R.drawable.mac),
-                                    contentDescription = null,
-                                    modifier = Modifier.clickable(
-                                        onClick = {/*onHeelClick*/}, indication = null,
-                                        interactionSource = remember { MutableInteractionSource() })
-                                )
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                            }
-
-
-                        }
-                        items(state.data.products.filter {
-                            it.category != "groceries" &&
-                                    it.category != "home-decoration"
-                                    && it.category != "kitchen-accessories"
-                                    && it.category != "motorcycle"
-                                    && it.category != "sports-accessories"
-                                    && it.category != "vehicle"
-                                    && it.category != "furniture"
-                        }
-                            .shuffled()
-                            .take(26)
-                        ) { products ->
-                            ProductCard(
-                                thumbnail = products.thumbnail,
-                                title = products.title,
-                              
-                                productList = products
-                            ){
-                                navController.navigate(Routes.ProductDetailScreen(productId = products.id?:0))
-                            }
-                        }
-
-                        item(span = {GridItemSpan(2)}) {
-                            Column {
-                                MoreItemComponent() {//onClicked
-
-                                        navController.navigate(Routes.AllProductScreen)
-
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-                                ShoesCard {//onShoesClick
-
-                                }
-                                Spacer(modifier = Modifier.height(16.dp))
-
-                            }
-                        }
-                    }
-                }
-
-                is Result.Failure -> {
-                    FailureComponent {
-                        productViewModel.reset()
-                    }
-                }
-
-                else -> {
-                    Text(
-                        text = "Loading"
-                    )
-                }
-
-            }
+            home()
         }
 
     }
-
 }
