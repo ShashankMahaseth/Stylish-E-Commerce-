@@ -2,6 +2,7 @@ package com.example.stylishe_commerceapp.presentation.Components.HomeComponents
 
 import Product
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -36,6 +38,8 @@ import coil3.request.crossfade
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.AddToCartComponent
+import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.FavoriteIcon
+import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.ProductDetailShareComponent
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.common.ShareComponent
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
@@ -70,7 +74,14 @@ fun ProductDetailComponent(product: Product) {
 
 
     Column(modifier = Modifier.padding(8.dp)) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
 
+        ProductDetailShareComponent(
+
+            productList = product,
+            title = product.title,
+        )
+    }
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
@@ -105,31 +116,30 @@ fun ProductDetailComponent(product: Product) {
                 pagerState = pagerState,
                 )
             Spacer(modifier = Modifier.height(8.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "Brand:${product.brand?:"No Brand"}",
+                text = "Brand:${product.brand ?: "No Brand"}",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
                 color = colorResource(R.color.Crimson)
             )
+            FavoriteIcon()
+        }
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
-                text = "${product.sku}",
+                text = "${product.title}",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = colorResource(R.color.Blue)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "${product.title}",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = colorResource(R.color.Black)
-            )
+
+
             Spacer(modifier = Modifier.height(8.dp))
         product.description?.let {
             Text(
                 text =it,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 color = colorResource(R.color.Black)
             )
         }

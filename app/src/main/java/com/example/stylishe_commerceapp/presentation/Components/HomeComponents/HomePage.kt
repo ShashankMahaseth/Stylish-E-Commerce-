@@ -47,9 +47,9 @@ fun HomePage(productViewModel: ProductViewModel,navController: NavController) {
     val productState by productViewModel.products.collectAsState()
     var search by remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit) {
-        productViewModel.getAllProducts()
-    }
+LaunchedEffect(Unit) {
+    productViewModel.getAllProducts()
+}
     HomeScreen(navController) {
 
         when (val state = productState) {

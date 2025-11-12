@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -25,6 +26,8 @@ import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 @Composable
 fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController: NavController) {
     val state by viewModel.products.collectAsState()
+
+
 
     when (val state = state) {
 

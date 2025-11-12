@@ -1,5 +1,6 @@
 package com.example.stylishe_commerceapp.data.service
 
+import Product
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.data.remote.ProductDto
 import io.ktor.client.HttpClient
@@ -15,5 +16,11 @@ class ProductApiService @Inject constructor(val httpClient: HttpClient){
                 parameter("limit", limit)
             }.body()
         }
+    suspend fun searchProducts(query:String) : ProductDto{
+        return httpClient.get("products/search"){
+            parameter("q",query)
+        }.body()
+
+    }
 
 }

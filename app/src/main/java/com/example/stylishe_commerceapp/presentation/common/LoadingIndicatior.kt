@@ -17,9 +17,8 @@ import com.example.stylishe_commerceapp.R
 @Composable
 fun LoadingIndicator() {
     val colors = listOf(colorResource(R.color.Red),
-        colorResource(R.color.yellow),
-        colorResource(R.color.green),
-        colorResource(R.color.blue))
+        colorResource(R.color.HotPink),
+    )
     var currentColorIndex by remember { mutableStateOf(0) }
 
     // Infinite transition for smooth color change

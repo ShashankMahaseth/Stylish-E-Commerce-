@@ -1,43 +1,58 @@
 package com.example.stylishe_commerceapp.presentation.Components.HomeComponents
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.navOptions
 import com.example.stylishe_commerceapp.R
+import com.example.stylishe_commerceapp.presentation.Navigation.Routes
+import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 
 @Composable
-fun HomeCategory() {
-    Row(
+fun HomeCategory(navController: NavController) {
+    LazyRow(
         modifier = Modifier
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp), // space between items
         verticalAlignment = Alignment.CenterVertically
     ) {
-        categoryList.forEach { category ->
+        items(categoryList){ category ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 IconButton(
-                    onClick = {},
+                    onClick = {
+                        when(category.image){
+                            categoryList[0].image->navController.navigate(Routes.AllCommonProductScreen(listOf("beauty","skin-care")))
+                            categoryList[1].image->navController.navigate(Routes.AllCommonProductScreen(listOf("womens-shoes","mens-shoes"
+                                ,"mens-watches",
+                                "sunglasses","tops", "womens-jewellery","womens-shoes", "womens-watches")))
+                            categoryList[2].image->navController.navigate(Routes.AllCommonProductScreen(listOf("smartphones","laptops"
+                                ,"tablets",
+                                "mobile-accessories")))
+
+                            categoryList[3].image->navController.navigate(Routes.AllCommonProductScreen(listOf("womens-dresses","tops")))
+                            categoryList[4].image->navController.navigate(Routes.AllCommonProductScreen(listOf("mens-shirts","mens-shoes")))
+
+                        }
+
+                    },
                     shape = CircleShape,
                     modifier = Modifier
                         .size(72.dp)

@@ -1,6 +1,5 @@
 package com.example.stylish.Navigation
 
-import Product
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -8,8 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.stylishe_commerceapp.data.remote.ProductDto
-
 import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.forgetpage.ForgotPage
 import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.loginpage.LoginScreen
 import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.signuppage.SignUpScreen
@@ -17,8 +14,10 @@ import com.example.stylishe_commerceapp.presentation.AuthPage.SplashScreen.Splas
 import com.example.stylishe_commerceapp.presentation.AuthPage.onboarding.OnBoardingScreen
 import com.example.stylishe_commerceapp.presentation.HomePage.AllProductScreen
 import com.example.stylishe_commerceapp.presentation.HomePage.HomeScreen
-
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
+import com.example.stylishe_commerceapp.presentation.AllCommonProductScreen.AllCommonProductScreen
+import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomePage
+import com.example.stylishe_commerceapp.presentation.Favorite.FavoritePage
 import com.example.stylishe_commerceapp.presentation.ProductDetailsScreen.ProductDetailsScreen
 import com.example.stylishe_commerceapp.presentation.SearchScreen.SearchScreen
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
@@ -33,12 +32,12 @@ fun NavigationApp() {
     val viewModel: AuthViewModel = viewModel()
     val productViewModel: ProductViewModel = viewModel()
 
-    val userPreferencesViewModel: UserPreferencesViewModel= viewModel()
+    val userPreferencesViewModel: UserPreferencesViewModel = viewModel()
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.Splash) {
         composable<Routes.Splash> {
-            SplashScreen(navController,userPreferencesViewModel)
+            SplashScreen(navController, userPreferencesViewModel)
         }
         composable<Routes.Onboarding> {
             OnBoardingScreen(navController)
@@ -53,19 +52,19 @@ fun NavigationApp() {
             SignUpScreen(navController, viewModel)
         }
         composable<Routes.Forgot> {
-            ForgotPage(navController,viewModel)
+            ForgotPage(navController, viewModel)
         }
         composable<Routes.Home> {
             // Disable back button on HomeScreen
-          //  BackHandler(enabled = true) { }
+            //  BackHandler(enabled = true) { }
 
-            HomeScreen(productViewModel,navController)
+            HomePage(productViewModel,navController)
         }
         composable<Routes.AllProductScreen> {
-            AllProductScreen(navController,productViewModel)
+            AllProductScreen(navController, productViewModel)
         }
         composable<Routes.SearchScreen> {
-            SearchScreen()
+            SearchScreen(searchViewModel = productViewModel, navController)
         }
         composable<Routes.ProductDetailScreen> { backStackEntry ->
             val args = backStackEntry.toRoute<Routes.ProductDetailScreen>()
@@ -74,7 +73,20 @@ fun NavigationApp() {
                 productId = args.productId,
                 navController
             )
-             }
+        }
+        composable <Routes.AllCommonProductScreen>{  backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.AllCommonProductScreen>()
+            AllCommonProductScreen(
+                navController = navController,
+                productViewModel = productViewModel,
+                categoryName = args.categoryName
+            )
+
+
+        }
+        composable<Routes.FavoritePage> {
+            FavoritePage(navController)
+        }
     }
 }
 

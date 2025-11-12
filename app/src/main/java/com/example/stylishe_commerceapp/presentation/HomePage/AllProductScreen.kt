@@ -38,10 +38,11 @@ import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AllProductScreen(navController: NavController, productViewModel: ProductViewModel){
-    val productState by productViewModel.products.collectAsState()
-    LaunchedEffect(Unit){
-        productViewModel.getAllProducts()
-    }
+    val productState by productViewModel.allProducts.collectAsState()
+
+LaunchedEffect(Unit) {
+    productViewModel.getCompleteProducts()
+}
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -85,6 +86,7 @@ fun AllProductScreen(navController: NavController, productViewModel: ProductView
                             ) {
                                 items(state.data.products.filter {
 
+
                                     it.category != "groceries" &&
                                             it.category != "home-decoration"
                                             && it.category != "kitchen-accessories"
@@ -106,7 +108,7 @@ fun AllProductScreen(navController: NavController, productViewModel: ProductView
                         }
                         is Result.Failure->{
                             FailureComponent {
-                                productViewModel.reset()
+                                productViewModel.refresh()
                             }
 
                         }
