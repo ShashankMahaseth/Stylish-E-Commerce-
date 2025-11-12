@@ -25,7 +25,7 @@ import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
 import com.tbuonomo.viewpagerdotsindicator.compose.type.ShiftIndicatorType
 import kotlinx.coroutines.delay
-
+Shashank
 @Composable
 @Preview(showSystemUi = true)
 fun Banner() {
