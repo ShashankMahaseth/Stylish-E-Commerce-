@@ -37,5 +37,8 @@ sealed class Routes {
     @Serializable
     data object FavoritePage : Routes()
 
+    @Serializable
+    data object  CategoryScreen : Routes()
+
 
 }

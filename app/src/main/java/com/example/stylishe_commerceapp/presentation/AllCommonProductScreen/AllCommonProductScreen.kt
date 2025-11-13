@@ -39,7 +39,7 @@ fun AllCommonProductScreen(navController: NavController, productViewModel: Produ
     LaunchedEffect(Unit) {
         productViewModel.getCategoryProducts()
     }
-Shashanl
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

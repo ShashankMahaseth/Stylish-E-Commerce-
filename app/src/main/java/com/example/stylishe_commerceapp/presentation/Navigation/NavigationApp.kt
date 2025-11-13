@@ -16,6 +16,7 @@ import com.example.stylishe_commerceapp.presentation.HomePage.AllProductScreen
 import com.example.stylishe_commerceapp.presentation.HomePage.HomeScreen
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
 import com.example.stylishe_commerceapp.presentation.AllCommonProductScreen.AllCommonProductScreen
+import com.example.stylishe_commerceapp.presentation.CategoryScreen.CategoryScreen
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomePage
 import com.example.stylishe_commerceapp.presentation.Favorite.FavoritePage
 import com.example.stylishe_commerceapp.presentation.ProductDetailsScreen.ProductDetailsScreen
@@ -86,6 +87,9 @@ fun NavigationApp() {
         }
         composable<Routes.FavoritePage> {
             FavoritePage(navController)
+        }
+        composable<Routes.CategoryScreen> {
+            CategoryScreen(navController)
         }
     }
 }

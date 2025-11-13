@@ -75,6 +75,8 @@ fun BottomNavigationBar(navController: NavController){
                             when(index) {
                                 0 -> navController.navigate(Routes.Home)
                                 1-> navController.navigate(Routes.FavoritePage)
+                                3-> navController.navigate(Routes.CategoryScreen)
+
                             }
 
                         }) {
@@ -85,6 +87,7 @@ fun BottomNavigationBar(navController: NavController){
                                 tint = when {
                                     index == 0 && currentRoute == Routes.Home::class.qualifiedName -> colorResource(R.color.Crimson)
                                     index == 1 && currentRoute == Routes.FavoritePage::class.qualifiedName -> colorResource(R.color.Crimson)
+                                    index == 3 && currentRoute == Routes.CategoryScreen::class.qualifiedName -> colorResource(R.color.Crimson)
                                     else -> Color.Black
                                 }
                             )
