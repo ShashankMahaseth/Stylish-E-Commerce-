@@ -44,9 +44,12 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
+    val roomVersion = "2.8.3"
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -86,7 +89,7 @@ dependencies {
     implementation("com.tbuonomo:dotsindicator:5.1.0")
 
     // Preferences DataStore (SharedPreferences like APIs)
-    dependencies {
+
         implementation("androidx.datastore:datastore-preferences:1.1.7")
 
         // optional - RxJava2 support
@@ -94,12 +97,21 @@ dependencies {
 
         // optional - RxJava3 support
         implementation("androidx.datastore:datastore-preferences-rxjava3:1.1.7")
-    }
+
 
     // Alternatively - use the following artifact without an Android dependency.
-    dependencies {
+
         implementation("androidx.datastore:datastore-preferences-core:1.1.7")
-    }
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+
+    // Room Database
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+
+
+
 
 }

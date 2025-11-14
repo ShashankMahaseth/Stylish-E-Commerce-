@@ -1,6 +1,5 @@
 package com.example.stylishe_commerceapp.domain.repository
 
-import Product
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.data.remote.ProductDto
 

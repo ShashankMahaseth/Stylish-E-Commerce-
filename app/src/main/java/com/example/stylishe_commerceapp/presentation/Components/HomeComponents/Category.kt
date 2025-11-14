@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,13 +51,15 @@ fun Category(navController: NavController) {
     ) {
         items(categoryList){ category ->
 
-                Box (modifier = Modifier.padding(vertical = 16.dp)){
+                Box (modifier = Modifier.padding(16.dp)){
                     // Title below the icon
                     Box(modifier=Modifier.fillMaxWidth().border(1.dp,
                         color=colorResource(R.color.silver),
                         shape =  RoundedCornerShape(topStart = 50.dp, bottomStart = 50.dp)
                         ).size(90.dp).
-                        clickable(onClick = {
+                        clickable(
+                            onClick = {
+
                             when (category.image) {
                                 categoryList[0].image -> navController.navigate(
                                     Routes.AllCommonProductScreen(
@@ -100,7 +104,10 @@ fun Category(navController: NavController) {
                                 )
 
                             }
-                        })
+                        },
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        )
 
                     ){
                         Text(

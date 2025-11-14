@@ -29,7 +29,7 @@ sealed class Routes {
     data object SearchScreen: Routes()
 
     @Serializable
-    data class ProductDetailScreen(val productId:Int) : Routes()
+    data class ProductDetailScreen(val productId:Int?) : Routes()
 
     @Serializable
     data class AllCommonProductScreen(val categoryName: List< String>) : Routes()

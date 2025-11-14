@@ -1,8 +1,7 @@
 package com.example.stylishe_commerceapp.presentation.Components.HomeComponents
 
-import Product
+import com.example.stylishe_commerceapp.data.remote.Product
 import android.content.Intent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.example.stylishe_commerceapp.R
-import com.example.stylishe_commerceapp.data.remote.ProductDto
 import com.example.stylishe_commerceapp.presentation.common.ShareComponent
 import kotlin.math.round
 

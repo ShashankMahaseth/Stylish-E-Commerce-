@@ -1,28 +1,32 @@
-import com.example.stylishe_commerceapp.data.remote.Dimensions
-import com.example.stylishe_commerceapp.data.remote.Meta
-import com.example.stylishe_commerceapp.data.remote.Review
+package com.example.stylishe_commerceapp.data.remote
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Entity(tableName = "favorite")
 data class Product(
     val availabilityStatus: String? = null,
     val brand: String? = null,
     var category: String? = null,
     val description: String? = null,
-    val dimensions: Dimensions? = null,
+
     val discountPercentage: Double? = null,
-    val id: Int? = null,
-    val images: List<String>? = emptyList(),
-    val meta: Meta? = null,
+
+    @PrimaryKey
+    val id: Int ,
+    val images: List<String>? = null,
+
     val minimumOrderQuantity: Int? = null,
     val price: Double? = null,
     val rating: Double? = null,
     val returnPolicy: String? = null,
-    val reviews: List<Review>? = null,
+
     val shippingInformation: String? = null,
     val sku: String? = null,
     val stock: Int? = null,
-    val tags: List<String>? = emptyList(),
+    val tags: List<String>? = null,
     val thumbnail: String? = null,
     val title: String? = null,
     val warrantyInformation: String? = null,

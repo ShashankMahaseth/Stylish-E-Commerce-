@@ -1,30 +1,25 @@
 package com.example.stylishe_commerceapp.presentation.ProductDetailsScreen
 
-import Product
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.core.utils.Result
-import com.example.stylishe_commerceapp.data.remote.ProductDto
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ProductDetailComponent
 import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.ProductDetailTopAppBar
+import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 
 @Composable
-fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController: NavController) {
+fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController: NavController,favoriteViewModel: FavoriteViewModel) {
     val state by viewModel.products.collectAsState()
 
 
@@ -58,7 +53,7 @@ fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController
 
 
                         if (product != null) {
-                            ProductDetailComponent(product = product)
+                            ProductDetailComponent(product = product,favoriteViewModel)
                         } else {
                             FailureComponent {
                                 viewModel.reset()

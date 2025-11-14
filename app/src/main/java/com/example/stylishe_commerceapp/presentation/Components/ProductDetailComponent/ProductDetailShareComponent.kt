@@ -1,6 +1,6 @@
 package com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent
 
-import Product
+import com.example.stylishe_commerceapp.data.remote.Product
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size

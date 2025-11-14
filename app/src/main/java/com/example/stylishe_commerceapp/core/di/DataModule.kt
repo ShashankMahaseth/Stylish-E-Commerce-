@@ -4,12 +4,17 @@ package com.example.stylishe_commerceapp.core.di
 
 
 import android.content.Context
+import androidx.room.Room
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.AuthRepositoryImplementation
+import com.example.stylishe_commerceapp.data.RepositoryImplementation.FavoriteRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.ProductRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.UserPreferenceImplementation
+import com.example.stylishe_commerceapp.data.local.Dao.FavoriteDao
+import com.example.stylishe_commerceapp.data.local.Database.FavoriteDatabase
 import com.example.stylishe_commerceapp.data.local.UserPreferencesDataStore
 import com.example.stylishe_commerceapp.data.service.ProductApiService
 import com.example.stylishe_commerceapp.domain.repository.AuthRepository
+import com.example.stylishe_commerceapp.domain.repository.FavoriteRepository
 import com.example.stylishe_commerceapp.domain.repository.ProductRepository
 import com.example.stylishe_commerceapp.domain.repository.UserPreferenceRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -99,5 +104,27 @@ object DataModule {
     @Singleton
     fun provideUserPreferencesDataStore(userPreferencesDataStore: UserPreferencesDataStore): UserPreferenceRepository {
         return UserPreferenceImplementation(userPreferencesDataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun FavoriteDatabase(@ApplicationContext context: Context): FavoriteDatabase {
+        return Room.databaseBuilder(
+            context,
+            klass=FavoriteDatabase::class.java,
+            name="favorite_database"
+        ).build()
+
+    }
+    @Provides
+    @Singleton
+fun provideFavoriteDao(favoriteDatabase: FavoriteDatabase) : FavoriteDao {
+    return favoriteDatabase.favoriteDao
+}
+
+    @Provides
+    @Singleton
+    fun provideFavoriteRepository(favoriteDao: FavoriteDao): FavoriteRepository {
+        return FavoriteRepositoryImplementation(favoriteDao)
     }
 }

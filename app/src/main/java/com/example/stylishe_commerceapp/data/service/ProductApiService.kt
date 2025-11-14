@@ -1,7 +1,5 @@
 package com.example.stylishe_commerceapp.data.service
 
-import Product
-import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.data.remote.ProductDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

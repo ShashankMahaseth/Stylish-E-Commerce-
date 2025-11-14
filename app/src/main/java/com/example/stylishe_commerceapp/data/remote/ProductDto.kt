@@ -1,6 +1,5 @@
 package com.example.stylishe_commerceapp.data.remote
 
-import Product
 import kotlinx.serialization.Serializable
 
 @Serializable

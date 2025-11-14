@@ -22,6 +22,7 @@ import com.example.stylishe_commerceapp.presentation.Favorite.FavoritePage
 import com.example.stylishe_commerceapp.presentation.ProductDetailsScreen.ProductDetailsScreen
 import com.example.stylishe_commerceapp.presentation.SearchScreen.SearchScreen
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
+import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.UserPreferencesViewModel
 
@@ -32,6 +33,7 @@ fun NavigationApp() {
 
     val viewModel: AuthViewModel = viewModel()
     val productViewModel: ProductViewModel = viewModel()
+    val favoriteViewModel: FavoriteViewModel=viewModel()
 
     val userPreferencesViewModel: UserPreferencesViewModel = viewModel()
 
@@ -71,8 +73,9 @@ fun NavigationApp() {
             val args = backStackEntry.toRoute<Routes.ProductDetailScreen>()
             ProductDetailsScreen(
                 viewModel = productViewModel,
-                productId = args.productId,
-                navController
+                productId = args.productId?:0,
+                navController,
+                favoriteViewModel
             )
         }
         composable <Routes.AllCommonProductScreen>{  backStackEntry ->
@@ -86,7 +89,7 @@ fun NavigationApp() {
 
         }
         composable<Routes.FavoritePage> {
-            FavoritePage(navController)
+            FavoritePage(navController,favoriteViewModel)
         }
         composable<Routes.CategoryScreen> {
             CategoryScreen(navController)
