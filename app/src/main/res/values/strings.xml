@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stylish(E-Commerce App)</string>
+    <string name="app_name">Stylish</string>
     <string name ="header">"Our smart recommendations and curated collections make it simple to discover products you'll love. Personalized just for you."</string>
     <string name="choose_product">"Choose Products"</string>
     <string name="make_payment">"Make Payment"</string>
