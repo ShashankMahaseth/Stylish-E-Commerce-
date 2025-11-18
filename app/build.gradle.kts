@@ -48,6 +48,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.database)
     val roomVersion = "2.8.3"
 
 

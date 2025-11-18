@@ -76,6 +76,7 @@ fun BottomNavigationBar(navController: NavController){
                                 0 -> navController.navigate(Routes.Home)
                                 1-> navController.navigate(Routes.FavoritePage)
                                 3-> navController.navigate(Routes.CategoryScreen)
+                                4->navController.navigate(Routes.SettingScreen)
 
                             }
 
@@ -88,6 +89,7 @@ fun BottomNavigationBar(navController: NavController){
                                     index == 0 && currentRoute == Routes.Home::class.qualifiedName -> colorResource(R.color.Crimson)
                                     index == 1 && currentRoute == Routes.FavoritePage::class.qualifiedName -> colorResource(R.color.Crimson)
                                     index == 3 && currentRoute == Routes.CategoryScreen::class.qualifiedName -> colorResource(R.color.Crimson)
+                                    index==4 && currentRoute == Routes.SettingScreen::class.qualifiedName->colorResource(R.color.Crimson)
                                     else -> Color.Black
                                 }
                             )

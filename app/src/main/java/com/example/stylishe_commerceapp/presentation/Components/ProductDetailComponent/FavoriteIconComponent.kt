@@ -19,7 +19,7 @@ import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 @Composable
 fun FavoriteIcon(favoriteViewModel: FavoriteViewModel,product: Product){
     val state by favoriteViewModel.state.collectAsState()
-    val isFavorite = state.filteredProducts.contains(product)
+    val isFavorite = state.filteredProducts.contains(product)//contains is boolean
     IconButton(onClick = {
     if(isFavorite){
         favoriteViewModel.removeFavoriteProduct(product.id)

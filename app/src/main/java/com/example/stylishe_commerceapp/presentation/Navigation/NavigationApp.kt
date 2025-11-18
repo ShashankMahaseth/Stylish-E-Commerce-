@@ -21,9 +21,11 @@ import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.H
 import com.example.stylishe_commerceapp.presentation.Favorite.FavoritePage
 import com.example.stylishe_commerceapp.presentation.ProductDetailsScreen.ProductDetailsScreen
 import com.example.stylishe_commerceapp.presentation.SearchScreen.SearchScreen
+import com.example.stylishe_commerceapp.presentation.SettingScreen.SettingScreen
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
+import com.example.stylishe_commerceapp.presentation.ViewModel.SettingVIewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.UserPreferencesViewModel
 
 @Composable
@@ -34,6 +36,7 @@ fun NavigationApp() {
     val viewModel: AuthViewModel = viewModel()
     val productViewModel: ProductViewModel = viewModel()
     val favoriteViewModel: FavoriteViewModel=viewModel()
+    val settingViewModel: SettingVIewModel = viewModel()
 
     val userPreferencesViewModel: UserPreferencesViewModel = viewModel()
 
@@ -94,6 +97,11 @@ fun NavigationApp() {
         composable<Routes.CategoryScreen> {
             CategoryScreen(navController)
         }
+
+        composable<Routes.SettingScreen> {
+            SettingScreen(navController,settingViewModel)
+        }
+
     }
 }
 

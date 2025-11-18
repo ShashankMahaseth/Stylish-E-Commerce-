@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +44,10 @@ import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 fun SearchScreen(searchViewModel: ProductViewModel, navController: NavController){
     val searchState by searchViewModel.searchProduct .collectAsState()
     var search by remember { mutableStateOf("") }
+    val focusRequester=remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()  // help to focus on search bar
+    }
 
     Scaffold(
         topBar = {

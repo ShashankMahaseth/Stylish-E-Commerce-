@@ -1,14 +1,12 @@
 package com.example.stylishe_commerceapp.core.di
 
-
-
-
 import android.content.Context
 import androidx.room.Room
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.AuthRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.FavoriteRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.ProductRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.UserPreferenceImplementation
+import com.example.stylishe_commerceapp.data.RepositoryImplementation.UserSettingRepositoryImplementation
 import com.example.stylishe_commerceapp.data.local.Dao.FavoriteDao
 import com.example.stylishe_commerceapp.data.local.Database.FavoriteDatabase
 import com.example.stylishe_commerceapp.data.local.UserPreferencesDataStore
@@ -17,7 +15,9 @@ import com.example.stylishe_commerceapp.domain.repository.AuthRepository
 import com.example.stylishe_commerceapp.domain.repository.FavoriteRepository
 import com.example.stylishe_commerceapp.domain.repository.ProductRepository
 import com.example.stylishe_commerceapp.domain.repository.UserPreferenceRepository
+import com.example.stylishe_commerceapp.domain.repository.UserSettingRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 import dagger.Module
 import dagger.Provides
@@ -127,4 +127,19 @@ fun provideFavoriteDao(favoriteDatabase: FavoriteDatabase) : FavoriteDao {
     fun provideFavoriteRepository(favoriteDao: FavoriteDao): FavoriteRepository {
         return FavoriteRepositoryImplementation(favoriteDao)
     }
+
+@Provides
+@Singleton
+fun provideFireBaseDatabase(): FirebaseDatabase {
+    return FirebaseDatabase.getInstance()
+}
+
+    @Provides
+    @Singleton
+
+    fun provideUserSettingRepository(database: FirebaseDatabase) : UserSettingRepository{
+        return UserSettingRepositoryImplementation(database)
+    }
+
+
 }
