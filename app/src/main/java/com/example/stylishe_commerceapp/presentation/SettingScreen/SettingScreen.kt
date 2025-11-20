@@ -30,6 +30,7 @@ import com.example.stylishe_commerceapp.presentation.Components.SettingComponent
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.SaveButton
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.SettingTopAppBar
 import com.example.stylishe_commerceapp.presentation.ViewModel.SettingVIewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun SettingScreen(navController: NavController, settingViewModel: SettingVIewModel) {
@@ -42,6 +43,9 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
     var state by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
     var upiId by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf(settingViewModel.firebaseAuth.currentUser?.email ?: "") }
+
+
 
     var enable by remember { mutableStateOf(false) }
     LaunchedEffect(settingState.saveSuccess) {
@@ -65,6 +69,13 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
         }
 
     }
+    LaunchedEffect(Unit) {
+        settingViewModel.loadUserEmail()
+    }
+    LaunchedEffect(Unit) {
+        delay(500)
+        settingViewModel.loadUserProfile()
+    }
 
     LaunchedEffect(settingState.userProfile) {
         name = settingState.userProfile.name
@@ -74,7 +85,13 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
         state = settingState.userProfile.state
         country = settingState.userProfile.country
         upiId = settingState.userProfile.upiId
+        email = settingState.userProfile
+            .email.ifEmpty {
+            settingViewModel.firebaseAuth.currentUser?.email ?: ""
+        }
     }
+
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = colorResource(R.color.WhiteSmoke),
@@ -100,7 +117,7 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
                         ProfileComponent {/*onClick*/ }
                         PersonalDetails(
                             name = name,
-                            email = settingState.userProfile.email,
+                            email = email,
                             nameTextField = { name = it },
                             emailTextField = { }
                         )
@@ -139,6 +156,7 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
                         SaveButton(settingViewModel) {
 
                             val allFilled = name.isNotEmpty() &&
+                                    email.isNotEmpty()
                                     pinCode.isNotEmpty() &&
                                     address.isNotEmpty() &&
                                     city.isNotEmpty() &&
@@ -167,7 +185,7 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
                             // Save data
                             val userProfile = UserProfile(
                                 name = name,
-                                email = settingState.userProfile.email,
+                                email = email,
                                 address = address,
                                 city = city,
                                 state = state,
