@@ -9,6 +9,8 @@ data class UserProfile(
     val city: String="",
     val state: String="",
     val country: String="",
-    val upiId: String=""
+    val upiId: String="",
+    val profilePhotoUrl: String? = null  // new field
+
 
 )

@@ -59,8 +59,8 @@ fun HomeScreen(navController: NavController,home:@Composable ()-> Unit) {
         modifier = Modifier.fillMaxSize(),
         containerColor = colorResource(R.color.WhiteSmoke),
         topBar = {
-            HomeTopAppBar(onListClick = {}) {//onProfileClick
-
+            HomeTopAppBar(onListClick = {}){
+                navController.navigate(Routes.SettingScreen)
             }
 
         },

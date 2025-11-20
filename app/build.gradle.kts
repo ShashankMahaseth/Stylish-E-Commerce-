@@ -114,7 +114,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("com.google.android.gms:play-services-auth:21.4.0")
-
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 
 
 

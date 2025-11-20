@@ -1,6 +1,9 @@
 package com.example.stylishe_commerceapp.presentation.SettingScreen
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +37,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.coroutines.delay
 
 @Composable
-fun SettingScreen(navController: NavController, settingViewModel: SettingVIewModel) {
+fun SettingScreen(navController: NavController,
+                  settingViewModel: SettingVIewModel
+) {
     val context = LocalContext.current
     val settingState by settingViewModel.state.collectAsState()
     var name by remember { mutableStateOf("") }
@@ -47,16 +52,24 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
 
 
 
+    LaunchedEffect(settingState.userProfile.email) {
+        if (settingState.userProfile.email.isNotEmpty()) {
+            // Email is automatically loaded from Firebase Auth
+        }
+    }
+
     LaunchedEffect(settingState.saveSuccess) {
         if (settingState.saveSuccess) {
             if (name.isNotEmpty() && pinCode.isNotEmpty() && address.isNotEmpty() &&
                 city.isNotEmpty() && state.isNotEmpty() &&
                 country.isNotEmpty() && upiId.isNotEmpty()
             ) {
-                Toast.makeText(context, "\uD83D\uDCBE Saved Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "\uD83D\uDCBE Saved Successfully", Toast.LENGTH_SHORT)
+                    .show()
                 settingViewModel.resetSaveSuccess()
             } else {
-                Toast.makeText(context, "⚠\uFE0F Please fill all the fields ❗❗", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "⚠\uFE0F Please fill all the fields ❗❗", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -74,6 +87,7 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
         settingViewModel.loadUserProfile()
     }
 
+
     LaunchedEffect(settingState.userProfile) {
         name = settingState.userProfile.name
         pinCode = settingState.userProfile.pinCode
@@ -82,9 +96,12 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
         state = settingState.userProfile.state
         country = settingState.userProfile.country
         upiId = settingState.userProfile.upiId
-      //  email = settingState.userProfile.email
+        //  email = settingState.userProfile.email
 
     }
+
+
+
 
 
 
@@ -111,12 +128,14 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
             ) {
                 item {
                     Column {
-                        ProfileComponent {/*onClick*/ }
+                        ProfileComponent(settingViewModel)
                         PersonalDetails(
                             name = name,
-                            email = when(val account = GoogleSignIn.getLastSignedInAccount(context)) {
-                                null -> settingState.userProfile.email
-                                else -> account.email?:"Already LoggedIn with Google , Facebook etc."
+                            email = when (val account =
+                                GoogleSignIn.getLastSignedInAccount(context)) {
+                                null ->settingViewModel.firebaseAuth.currentUser?.email?:""
+                                else -> account.email
+                                    ?: "Already LoggedIn with Google , Facebook etc."
                             },
                             nameTextField = { name = it },
                             emailTextField = { }
@@ -172,7 +191,11 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
                                     upiId != settingState.userProfile.upiId
 
                             if (!allFilled) {
-                                Toast.makeText(context, "⚠\uFE0F Please fill all the fields ❗❗", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "⚠\uFE0F Please fill all the fields ❗❗",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@SaveButton
                             }
 
@@ -184,9 +207,11 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
                             // Save data
                             val userProfile = UserProfile(
                                 name = name,
-                                email = when(val account = GoogleSignIn.getLastSignedInAccount(context)) {
-                                    null -> settingState.userProfile.email
-                                    else ->  account.email?:"Already LoggedIn with Google , Facebook etc."
+                                email = when (val account =
+                                    GoogleSignIn.getLastSignedInAccount(context)) {
+                                    null -> settingViewModel.firebaseAuth.currentUser?.email?:""
+                                    else -> account.email
+                                        ?: "Already LoggedIn with Google , Facebook etc."
                                 },
 
                                 address = address,

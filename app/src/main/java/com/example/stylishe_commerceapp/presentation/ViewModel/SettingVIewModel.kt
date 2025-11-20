@@ -1,11 +1,14 @@
 package com.example.stylishe_commerceapp.presentation.ViewModel
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.domain.model.UserProfile
 import com.example.stylishe_commerceapp.domain.repository.UserSettingRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,28 +20,32 @@ data class SettingState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val isSaving: Boolean = false,
-    val saveSuccess: Boolean = false
+    val saveSuccess: Boolean = false,
+    val profilePhotoUrl: String? = null
 
 )
 
 @HiltViewModel
 class SettingVIewModel @Inject constructor(
     val userSettingRepository: UserSettingRepository,
-    val firebaseAuth: FirebaseAuth
+    val firebaseAuth: FirebaseAuth,
 ) :
     ViewModel() {
     private val _state = MutableStateFlow(SettingState())
     val state = _state.asStateFlow()
 
-    init {
-        loadUserEmail()
-    }
 
-    private fun loadUserEmail() {
+init {
+    loadUserData()
+}
+    private fun loadUserData() {
         val currentUser = firebaseAuth.currentUser
         val email = currentUser?.email ?: ""
+        val photoUrl = currentUser?.photoUrl?.toString()
+
         _state.value = _state.value.copy(
-            userProfile = _state.value.userProfile.copy(email = email)
+            userProfile = _state.value.userProfile.copy(email = email),
+            profilePhotoUrl = photoUrl
         )
 
     }
@@ -127,6 +134,8 @@ class SettingVIewModel @Inject constructor(
     fun clearError() {
         _state.value = _state.value.copy(error = null)
     }
+
+
 
 
 
