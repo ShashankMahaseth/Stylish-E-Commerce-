@@ -30,8 +30,11 @@ class SettingVIewModel @Inject constructor(
     private val _state = MutableStateFlow(SettingState())
     val state = _state.asStateFlow()
 
+    init {
+        loadUserEmail()
+    }
 
-    fun loadUserEmail() {
+    private fun loadUserEmail() {
         val currentUser = firebaseAuth.currentUser
         val email = currentUser?.email ?: ""
         _state.value = _state.value.copy(
@@ -39,7 +42,6 @@ class SettingVIewModel @Inject constructor(
         )
 
     }
-
     fun loadUserProfile() {
         viewModelScope.launch {
             val userId = firebaseAuth.currentUser?.uid ?: return@launch

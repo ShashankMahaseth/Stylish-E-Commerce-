@@ -27,6 +27,7 @@ class UserSettingRepositoryImplementation @Inject constructor(private val databa
                 "userid" to userProfile.userId,
                 "name" to userProfile.name,
                 "email" to userProfile.email,
+                "upiId" to userProfile.upiId,
                 "pinCode" to userProfile.pinCode,
                 "address" to userProfile.address,
                 "city" to userProfile.city,

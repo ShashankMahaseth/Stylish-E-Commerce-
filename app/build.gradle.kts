@@ -49,6 +49,9 @@ android {
 
 dependencies {
     implementation(libs.firebase.database)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     val roomVersion = "2.8.3"
 
 
@@ -110,6 +113,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
+
 
 
 
