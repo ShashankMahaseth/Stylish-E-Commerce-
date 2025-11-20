@@ -30,10 +30,7 @@ class SettingVIewModel @Inject constructor(
     private val _state = MutableStateFlow(SettingState())
     val state = _state.asStateFlow()
 
-    init {
-        loadUserProfile()
-        loadUserEmail()
-    }
+
     private fun loadUserEmail() {
         val currentUser = firebaseAuth.currentUser
         val email = currentUser?.email ?: ""
