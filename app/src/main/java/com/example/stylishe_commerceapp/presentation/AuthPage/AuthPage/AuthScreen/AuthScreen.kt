@@ -1,5 +1,9 @@
 package com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.AuthScreen
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,18 +38,21 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.stylishe_commerceapp.R
+import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.AuthButton.AuthButton
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.LoginIcon.LoginIcon
+import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.LoginIcon.LoginIconImage
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.TextField.TextFieldItem
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetPasswordButton.ForgetPasswordButton
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetText.ForgotText
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.registerButton.RegisterButton
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.topheadertext.TopHeaderText
-
-import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
-import com.example.stylishe_commerceapp.core.utils.Result
-import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
+import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 
 @Composable
 fun AuthScreen(
@@ -68,8 +75,42 @@ fun AuthScreen(
     var errorMessage by remember { mutableStateOf("") }
     var isMatchedPassword by remember { mutableStateOf(false) }
 
-   var isVisible by remember{mutableStateOf(false)}
-    val passwordIcon = if(isVisible) R.drawable.ic_visibilty_on else R.drawable.ic_visibility_off
+    var isVisible by remember { mutableStateOf(false) }
+    val passwordIcon = if (isVisible) R.drawable.ic_visibilty_on else R.drawable.ic_visibility_off
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+
+        ) { result ->
+        when (result.resultCode) {
+            Activity.RESULT_OK -> {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    if (account != null) {
+                        authViewModel.signInWithGoogle(account)
+                    } else {
+
+                        errorMessage = "Google Sign In Failed"
+                    }
+                } catch (e: ApiException) {
+                    Toast.makeText(context, "Google Sign In Failed", Toast.LENGTH_SHORT).show()
+                    errorMessage = "Google sign in failed: ${e.statusCode}-${e.message}"
+                }
+            }
+
+            Activity.RESULT_CANCELED -> {
+                Toast.makeText(context, "Google Sign In Cancelled", Toast.LENGTH_SHORT).show()
+                errorMessage = "Google Sign In Cancelled"
+            }
+
+            else -> {
+                Toast.makeText(context, "Google Sign In Failed", Toast.LENGTH_SHORT).show()
+
+            }
+
+        }
+    }
 
     // Observe authentication state
     LaunchedEffect(authState1) {
@@ -89,9 +130,11 @@ fun AuthScreen(
                 }
                 authViewModel.resetState()
             }
+
             is Result.Failure -> {
                 errorMessage = (authState1 as Result.Failure).message
             }
+
             else -> {}
         }
     }
@@ -121,14 +164,17 @@ fun AuthScreen(
                     value = inputPassword,
                     leadingIcon = R.drawable.group_2,
                     trailingIcon = {
-                        IconButton(onClick = {isVisible=!isVisible},modifier = Modifier.size(24.dp)) {
+                        IconButton(
+                            onClick = { isVisible = !isVisible },
+                            modifier = Modifier.size(24.dp)
+                        ) {
                             Image(
                                 painter = painterResource(passwordIcon),
                                 contentDescription = "Visibility icon"
                             )
                         }
                     },
-                    visualTransformation =if(!isVisible) PasswordVisualTransformation() else VisualTransformation.None
+                    visualTransformation = if (!isVisible) PasswordVisualTransformation() else VisualTransformation.None
                 )
                 if (isSignUp) {
                     TextFieldItem(
@@ -137,19 +183,25 @@ fun AuthScreen(
                         value = confirmPassword,
                         leadingIcon = R.drawable.group_2,
                         trailingIcon = {
-                            IconButton(onClick = {isVisible=!isVisible}, modifier = Modifier.size(24.dp)) {
+                            IconButton(
+                                onClick = { isVisible = !isVisible },
+                                modifier = Modifier.size(24.dp)
+                            ) {
                                 Image(
                                     painter = painterResource(passwordIcon),
                                     contentDescription = "Visibility icon",
-                                    )
+                                )
                             }
                         },
-                        visualTransformation =if(!isVisible) PasswordVisualTransformation() else VisualTransformation.None
+                        visualTransformation = if (!isVisible) PasswordVisualTransformation() else VisualTransformation.None
                     )
-                    if(inputPassword != confirmPassword ){
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+                    if (inputPassword != confirmPassword) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
                             Text(
-                                text="Password not Matched!!",
+                                text = "Password not Matched!!",
                                 fontSize = 12.sp,
                                 color = Color.Red
                             )
@@ -198,28 +250,29 @@ fun AuthScreen(
                 AuthButton(
                     onClicked = {
 
-                        if(!isSignUp) {
+                        if (!isSignUp) {
                             if (username.isNotBlank() && inputPassword.isNotBlank()) {
                                 authViewModel.login(username, inputPassword)
                             }
-                        }
-                        else  {
+                        } else {
 
-                          if(inputPassword==confirmPassword ) {
-                              if (username.isNotBlank() && inputPassword.isNotBlank() && confirmPassword.isNotBlank()) {
-                                  authViewModel.signUp(username, inputPassword)
-                              }
-                          }else{
+                            if (inputPassword == confirmPassword) {
+                                if (username.isNotBlank() && inputPassword.isNotBlank() && confirmPassword.isNotBlank()) {
+                                    authViewModel.signUp(username, inputPassword)
+                                }
+                            } else {
 
-                              isMatchedPassword=!isMatchedPassword
+                                isMatchedPassword = !isMatchedPassword
 
-                          }
+                            }
 
                         }
                     }, text = authText,
                     authViewModel
                 )
             }
+
+
 
             if (!isForgot) {
                 Row(
@@ -232,9 +285,31 @@ fun AuthScreen(
                         text = "-Or Continue With-"
                     )
                 }
+
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    LoginIcon(onClicked = {}, "Login")
+                    LoginIcon(
+                        onClicked = {iconId->
+                            if(iconId==R.drawable.google) {
+
+
+                                val gso =
+                                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestIdToken(context.getString(R.string.default_web_client_id))
+                                        .build()
+
+                                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                                val signInIntent = googleSignInClient.signInIntent
+                                googleSignInLauncher.launch(signInIntent)
+                            }
+
+
+
+                        },
+                        "Login"
+                    )
                 }
+
+
 
                 Row(
                     modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center,

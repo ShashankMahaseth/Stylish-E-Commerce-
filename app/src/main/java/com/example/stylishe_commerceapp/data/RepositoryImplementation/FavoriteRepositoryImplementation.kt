@@ -4,8 +4,9 @@ import com.example.stylishe_commerceapp.data.local.Dao.FavoriteDao
 import com.example.stylishe_commerceapp.data.remote.Product
 import com.example.stylishe_commerceapp.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class FavoriteRepositoryImplementation(private val favoriteDao: FavoriteDao): FavoriteRepository{
+class FavoriteRepositoryImplementation @Inject constructor(private val favoriteDao: FavoriteDao): FavoriteRepository{
     override fun getFavoriteProducts(): Flow<List<Product>> {
         return favoriteDao.getAllFavoriteProducts()
     }

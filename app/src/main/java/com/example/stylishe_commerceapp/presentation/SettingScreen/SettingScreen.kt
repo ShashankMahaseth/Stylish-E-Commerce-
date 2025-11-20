@@ -43,7 +43,6 @@ fun SettingScreen(navController: NavController, settingViewModel: SettingVIewMod
     var country by remember { mutableStateOf("") }
     var upiId by remember { mutableStateOf("") }
 
-    var enable by remember { mutableStateOf(false) }
     LaunchedEffect(settingState.saveSuccess) {
         if (settingState.saveSuccess) {
             if (name.isNotEmpty() && pinCode.isNotEmpty() && address.isNotEmpty() &&

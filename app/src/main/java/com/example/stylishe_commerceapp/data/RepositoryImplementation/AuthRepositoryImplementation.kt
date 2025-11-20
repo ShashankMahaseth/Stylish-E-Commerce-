@@ -3,6 +3,9 @@ package com.example.stylishe_commerceapp.data.RepositoryImplementation
 import com.example.stylishe_commerceapp.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.example.stylishe_commerceapp.core.utils.Result
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class  AuthRepositoryImplementation @Inject constructor(
@@ -27,8 +30,17 @@ class  AuthRepositoryImplementation @Inject constructor(
         }
     }
 
-    override suspend fun googleLogin(email: String, password: String): Result<String> {
-        TODO("Not yet implemented")
+    override suspend fun googleLogin(account: GoogleSignInAccount): Result<String> {
+        return try {
+            val credential = GoogleAuthProvider.getCredential(account.idToken,null)
+
+            val authResult = firebaseAuth.signInWithCredential(credential).await()
+            Result.Success("Google SignIn Success")
+
+        }catch (e: Exception){
+            Result.Failure(e.localizedMessage ?:"Unknown Error")
+
+        }
     }
 
 

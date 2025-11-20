@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-
 interface FavoriteDao{
     @Query("SELECT * FROM favorite")
      fun getAllFavoriteProducts(): Flow<List<Product>>
