@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -33,6 +34,7 @@ import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.AddToCartComponent
 import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.FavoriteIcon
 import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.ProductDetailShareComponent
+import com.example.stylishe_commerceapp.presentation.ViewModel.CartViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 import com.tbuonomo.viewpagerdotsindicator.compose.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.compose.model.DotGraphic
@@ -41,7 +43,7 @@ import kotlinx.coroutines.delay
 import kotlin.math.round
 
 @Composable
-fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel) {
+fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel,cartViewModel: CartViewModel= hiltViewModel()) {
     val context=LocalContext.current
     val price = (product.price ?: 0.0) * 70.0
     val originalPrice = round(price*10) /10
@@ -164,7 +166,7 @@ fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        AddToCartComponent()
+        AddToCartComponent(cartViewModel = cartViewModel,product = product)
 
 
 

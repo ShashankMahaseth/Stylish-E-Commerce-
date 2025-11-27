@@ -8,18 +8,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.ProductDetailComponent
 import com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent.ProductDetailTopAppBar
+import com.example.stylishe_commerceapp.presentation.ViewModel.CartViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 
 @Composable
-fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController: NavController,favoriteViewModel: FavoriteViewModel) {
+fun ProductDetailsScreen(
+    viewModel: ProductViewModel,
+    productId: Int,
+    navController: NavController,
+    favoriteViewModel: FavoriteViewModel,
+    cartViewModel: CartViewModel = hiltViewModel()
+) {
     val state by viewModel.products.collectAsState()
 
 
@@ -33,10 +41,10 @@ fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController
     Scaffold(
 
         topBar = {
-            ProductDetailTopAppBar(navController)
+            ProductDetailTopAppBar(navController,cartViewModel)
         },
         containerColor = colorResource(R.color.WhiteSmoke)
-    ) {innerPadding->
+    ) { innerPadding ->
 
         LazyColumn(
             modifier = Modifier.padding(innerPadding)
@@ -53,7 +61,7 @@ fun ProductDetailsScreen(viewModel: ProductViewModel,productId:Int,navController
 
 
                         if (product != null) {
-                            ProductDetailComponent(product = product,favoriteViewModel)
+                            ProductDetailComponent(product = product, favoriteViewModel)
                         } else {
                             FailureComponent {
                                 viewModel.reset()

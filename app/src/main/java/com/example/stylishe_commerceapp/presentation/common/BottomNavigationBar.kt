@@ -56,16 +56,29 @@ fun BottomNavigationBar(navController: NavController){
 
                     if(index==2) {
                         IconButton(
-                                onClick = {}, modifier = Modifier.size(60.dp)
+                                onClick = {
+                                     navController.navigate(Routes.CartScreen)
+
+                                }, modifier = Modifier.size(60.dp)
                                     .align(Alignment.Top).shadow(6.dp, shape = CircleShape),
-                                colors = IconButtonDefaults.iconButtonColors(colorResource(R.color.Snow)),
+                                colors =
+                                    IconButtonDefaults.iconButtonColors(
+                                        containerColor = when{
+                                            currentRoute == Routes.CartScreen::class.qualifiedName->colorResource(R.color.Crimson)
+                                            else->colorResource(R.color.Snow)
+                                        }
+                                    ),
                                 shape = CircleShape
                             ) {
 
                                 Icon(
                                     painter = painterResource(icon),
                                     contentDescription = null,
-                                    modifier = Modifier.size(30.dp)
+                                    modifier = Modifier.size(30.dp),
+                                    tint = when{
+                                        currentRoute == Routes.CartScreen::class.qualifiedName->colorResource(R.color.Snow)
+                                        else->colorResource(R.color.Black)
+                                    }
                                 )
                             }
 
@@ -77,6 +90,7 @@ fun BottomNavigationBar(navController: NavController){
                                 1-> navController.navigate(Routes.FavoritePage)
                                 3-> navController.navigate(Routes.CategoryScreen)
                                 4->navController.navigate(Routes.SettingScreen)
+
 
                             }
 

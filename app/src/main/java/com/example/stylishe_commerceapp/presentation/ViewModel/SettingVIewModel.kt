@@ -34,11 +34,12 @@ class SettingVIewModel @Inject constructor(
     private val _state = MutableStateFlow(SettingState())
     val state = _state.asStateFlow()
 
-
 init {
+    loadUserProfile()
     loadUserData()
 }
-    private fun loadUserData() {
+
+    fun loadUserData() {
         val currentUser = firebaseAuth.currentUser
         val email = currentUser?.email ?: ""
         val photoUrl = currentUser?.photoUrl?.toString()
@@ -51,18 +52,25 @@ init {
     }
     fun loadUserProfile() {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true, error = null)
+
             val userId = firebaseAuth.currentUser?.uid ?: return@launch
 
-            userSettingRepository.getUserProfile(userId).collect { result ->
+            userSettingRepository.getUserProfile(userId).collect { result ->//collect will receive updates whenever profile changes in Firebase
                 when (result) {
                     is Result.Success -> {
                         _state.value = _state.value.copy(
-                            userProfile = result.data
+                            userProfile = result.data,
+                            isLoading = false,
+                            error = null
+
                         )
                     }
                     is Result.Failure -> {
                         _state.value = _state.value.copy(
-                            error = result.message
+                            error = result.message,
+                            isLoading = false,
+
                         )
                     }
                     else -> {}
@@ -83,18 +91,19 @@ init {
                         saveSuccess = false,
                         error = "User not logged in"
                     )
-                    return@launch
+                    return@launch//helps to exit early
                 }
                 _state.value = _state.value.copy(isSaving = true, saveSuccess = false, error = null)
 
                 val profileWithUserId = userProfile.copy(userId = userId)
-                when (val result = userSettingRepository.saveUserProfile(profileWithUserId)) {
+                when (val result = userSettingRepository.saveUserProfile(userProfile=profileWithUserId)) {
                     is Result.Success -> {
                         _state.value = _state.value.copy(
                             userProfile = userProfile,
                             isSaving = false,
                             saveSuccess = true,
-                            error = null
+
+                            isLoading = false
                         )
 
                     }
@@ -103,7 +112,8 @@ init {
                         _state.value = _state.value.copy(
                             isSaving = false,
                             saveSuccess = false,
-                            error = result.message
+                            error = result.message,
+                            isLoading = false
                         )
                     }
 
@@ -111,7 +121,8 @@ init {
                         _state.value = _state.value.copy(
                             isSaving = false,
                             saveSuccess = false,
-                            error = "Unknown Error"
+                            error = "Unknown Error",
+                            isLoading = false
 
                         )
 
@@ -122,7 +133,8 @@ init {
                 _state.value = _state.value.copy(
                     isSaving = false,
                     saveSuccess = false,
-                    error = e.localizedMessage ?: "Unknown Error"
+                    error = e.localizedMessage ?: "Unknown Error",
+                    isLoading = false
                 )
             }
 

@@ -38,6 +38,7 @@ class  AuthRepositoryImplementation @Inject constructor(
             Result.Success("Google SignIn Success")
 
         }catch (e: Exception){
+
             Result.Failure(e.localizedMessage ?:"Unknown Error")
 
         }

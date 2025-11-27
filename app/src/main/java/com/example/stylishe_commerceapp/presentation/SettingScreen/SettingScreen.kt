@@ -33,6 +33,8 @@ import com.example.stylishe_commerceapp.presentation.Components.SettingComponent
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.SaveButton
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.SettingTopAppBar
 import com.example.stylishe_commerceapp.presentation.ViewModel.SettingVIewModel
+import com.example.stylishe_commerceapp.presentation.common.FailureComponent
+import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import kotlinx.coroutines.delay
 
@@ -83,12 +85,12 @@ fun SettingScreen(navController: NavController,
     }
 
     LaunchedEffect(Unit) {
-        delay(500)
+        settingViewModel.loadUserData()
         settingViewModel.loadUserProfile()
     }
 
 
-    LaunchedEffect(settingState.userProfile) {
+    LaunchedEffect(settingState.userProfile) {//whenever the userProfile from the  ViewModel changes this effect updates local remember text field so UI shows the saved values.
         name = settingState.userProfile.name
         pinCode = settingState.userProfile.pinCode
         address = settingState.userProfile.address
@@ -115,118 +117,142 @@ fun SettingScreen(navController: NavController,
             }
         }
     ) { innerPadding ->
+        when {
+            settingState.isLoading -> {
+                LoadingIndicator()
+            }
+            settingState.error != null -> {
+                FailureComponent {
+                    settingViewModel.loadUserData()
+                    settingViewModel.loadUserProfile()
+                }
+            }
 
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                item {
-                    Column {
-                        ProfileComponent(settingViewModel)
-                        PersonalDetails(
-                            name = name,
-                            email = when (val account =
-                                GoogleSignIn.getLastSignedInAccount(context)) {
-                                null ->settingViewModel.firebaseAuth.currentUser?.email?:""
-                                else -> account.email
-                                    ?: "Already LoggedIn with Google , Facebook etc."
-                            },
-                            nameTextField = { name = it },
-                            emailTextField = { }
-                        )
+            else-> {
 
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp)
-                        )
 
-                        AddressDetails(
-                            pinCode = pinCode,
-                            address = address,
-                            city = city,
-                            state = state,
-                            country = country,
-                            pinCodeValueChanged = { pinCode = it },
-                            addressValueChanged = { address = it },
-                            cityChanged = { city = it },
-                            stateChanged = { state = it },
-                            countryChanged = { country = it }
-                        )
+                Box(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        item {
+                            Column {
+                                ProfileComponent(settingViewModel)
+                                PersonalDetails(
+                                    name = name,
+                                    email = when (val account =
+                                        GoogleSignIn.getLastSignedInAccount(context)) {
+                                        null -> settingViewModel.firebaseAuth.currentUser?.email
+                                            ?: ""
 
-                        Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp)
-                        )
+                                        else -> account.email
+                                            ?: "Already LoggedIn with Google , Facebook etc."
+                                    },
+                                    nameTextField = { name = it },
+                                    emailTextField = { }
+                                )
 
-                        PaymentDetails(
-                            upiId = upiId,
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 16.dp)
+                                )
 
-                            ) {
-                            upiId = it
-                        }
-                        SaveButton(settingViewModel) {
+                                AddressDetails(
+                                    pinCode = pinCode,
+                                    address = address,
+                                    city = city,
+                                    state = state,
+                                    country = country,
+                                    pinCodeValueChanged = { pinCode = it },
+                                    addressValueChanged = { address = it },
+                                    cityChanged = { city = it },
+                                    stateChanged = { state = it },
+                                    countryChanged = { country = it }
+                                )
 
-                            val allFilled = name.isNotEmpty() &&
-                                    pinCode.isNotEmpty() &&
-                                    address.isNotEmpty() &&
-                                    city.isNotEmpty() &&
-                                    state.isNotEmpty() &&
-                                    country.isNotEmpty() &&
-                                    upiId.isNotEmpty()
+                                Divider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 16.dp)
+                                )
 
-                            val anyChanged = name != settingState.userProfile.name ||
-                                    pinCode != settingState.userProfile.pinCode ||
-                                    address != settingState.userProfile.address ||
-                                    city != settingState.userProfile.city ||
-                                    state != settingState.userProfile.state ||
-                                    country != settingState.userProfile.country ||
-                                    upiId != settingState.userProfile.upiId
+                                PaymentDetails(
+                                    upiId = upiId,
 
-                            if (!allFilled) {
-                                Toast.makeText(
-                                    context,
-                                    "⚠\uFE0F Please fill all the fields ❗❗",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                return@SaveButton
+                                    ) {
+                                    upiId = it
+                                }
+                                SaveButton(settingViewModel) {
+
+                                    val allFilled = name.isNotEmpty() &&
+                                            pinCode.isNotEmpty() &&
+                                            address.isNotEmpty() &&
+                                            city.isNotEmpty() &&
+                                            state.isNotEmpty() &&
+                                            country.isNotEmpty() &&
+                                            upiId.isNotEmpty()
+
+                                    val anyChanged = name != settingState.userProfile.name ||
+                                            pinCode != settingState.userProfile.pinCode ||
+                                            address != settingState.userProfile.address ||
+                                            city != settingState.userProfile.city ||
+                                            state != settingState.userProfile.state ||
+                                            country != settingState.userProfile.country ||
+                                            upiId != settingState.userProfile.upiId
+
+                                    if (!allFilled) {
+                                        Toast.makeText(
+                                            context,
+                                            "⚠\uFE0F Please fill all the fields ❗❗",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        return@SaveButton
+                                    }
+
+                                    if (!anyChanged) {
+                                        Toast.makeText(
+                                            context,
+                                            "⚡Already Saved",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                        return@SaveButton//this returns only from the lambda, not the whole composable).
+                                    }
+
+                                    // Save data
+                                    val userProfile = UserProfile(
+                                        name = name,
+                                        email = when (val account =
+                                            GoogleSignIn.getLastSignedInAccount(context)) {
+                                            null -> settingViewModel.firebaseAuth.currentUser?.email
+                                                ?: ""
+
+                                            else -> account.email
+                                                ?: "Already LoggedIn with Google , Facebook etc."
+                                        },
+
+                                        address = address,
+                                        city = city,
+                                        state = state,
+                                        country = country,
+                                        upiId = upiId,
+                                        pinCode = pinCode
+                                    )
+                                    settingViewModel.updateUserProfile(userProfile)
+                                }
+
                             }
-
-                            if (!anyChanged) {
-                                Toast.makeText(context, "⚡Already Saved", Toast.LENGTH_SHORT).show()
-                                return@SaveButton
-                            }
-
-                            // Save data
-                            val userProfile = UserProfile(
-                                name = name,
-                                email = when (val account =
-                                    GoogleSignIn.getLastSignedInAccount(context)) {
-                                    null -> settingViewModel.firebaseAuth.currentUser?.email?:""
-                                    else -> account.email
-                                        ?: "Already LoggedIn with Google , Facebook etc."
-                                },
-
-                                address = address,
-                                city = city,
-                                state = state,
-                                country = country,
-                                upiId = upiId,
-                                pinCode = pinCode
-                            )
-                            settingViewModel.updateUserProfile(userProfile)
                         }
 
                     }
                 }
-
             }
         }
     }

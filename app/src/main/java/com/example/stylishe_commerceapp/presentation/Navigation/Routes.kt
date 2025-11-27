@@ -43,5 +43,20 @@ sealed class Routes {
     @Serializable
     data object SettingScreen : Routes()
 
+    @Serializable
+    data object CartScreen : Routes()
+
+    @Serializable
+    data object DeliveryScreen : Routes()
+
+    @Serializable
+    data object PaymentScreen : Routes()
+
+    @Serializable
+    data class ConformationScreen(val status: String?) : Routes()
 
 }
+
+
+
+

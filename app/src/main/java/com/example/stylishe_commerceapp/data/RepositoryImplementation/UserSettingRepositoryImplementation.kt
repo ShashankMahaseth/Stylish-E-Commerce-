@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class UserSettingRepositoryImplementation @Inject constructor(private val database: FirebaseDatabase) :
+class UserSettingRepositoryImplementation @Inject constructor( database: FirebaseDatabase) :
     UserSettingRepository {
     val userRef = database.getReference("users")
 
@@ -33,7 +33,6 @@ class UserSettingRepositoryImplementation @Inject constructor(private val databa
                 "city" to userProfile.city,
                 "state" to userProfile.state,
                 "country" to userProfile.country,
-                "upiId" to userProfile.upiId
             )
             userRef.child(userProfile.userId).setValue(profileMap).await()
             Result.Success(Unit)
@@ -46,7 +45,8 @@ class UserSettingRepositoryImplementation @Inject constructor(private val databa
         val listener = object : ValueEventListener {//A listener is a piece of code that waits for an event and runs automatically when that event occurs.
             override fun onDataChange(snapshot: DataSnapshot) {
                 try {
-                    val userProfile = snapshot.getValue(UserProfile::class.java)//snapShort helps to contains all the data from the firebase database
+                    val userProfile = snapshot.getValue(UserProfile::class.java)//convert into UserProfile object
+                    //snapShort helps to contains all the data from the firebase database
                     if (userProfile != null) {
                       trySend(Result.Success(userProfile))
                     } else {
@@ -58,12 +58,12 @@ class UserSettingRepositoryImplementation @Inject constructor(private val databa
             }
 
             override fun onCancelled(error: DatabaseError) {
-                trySend(Result.Failure(error.message))//if data comes/send then run otherwise no
+                trySend(Result.Failure(error.message))//trySend if data comes/send then run otherwise no
             }
         }
         userRef.child(userId).addValueEventListener(listener)
         awaitClose {
-            userRef.child(userId)
+            userRef.child(userId).removeEventListener(listener)
         }
     }
 

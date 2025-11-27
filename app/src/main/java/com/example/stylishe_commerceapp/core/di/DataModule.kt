@@ -3,21 +3,27 @@ package com.example.stylishe_commerceapp.core.di
 import android.content.Context
 import androidx.room.Room
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.AuthRepositoryImplementation
+import com.example.stylishe_commerceapp.data.RepositoryImplementation.CartRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.FavoriteRepositoryImplementation
+import com.example.stylishe_commerceapp.data.RepositoryImplementation.PaymentRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.ProductRepositoryImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.UserPreferenceImplementation
 import com.example.stylishe_commerceapp.data.RepositoryImplementation.UserSettingRepositoryImplementation
+import com.example.stylishe_commerceapp.data.local.CartDataStore
 import com.example.stylishe_commerceapp.data.local.Dao.FavoriteDao
 import com.example.stylishe_commerceapp.data.local.Database.FavoriteDatabase
 import com.example.stylishe_commerceapp.data.local.UserPreferencesDataStore
 import com.example.stylishe_commerceapp.data.service.ProductApiService
 import com.example.stylishe_commerceapp.domain.repository.AuthRepository
+import com.example.stylishe_commerceapp.domain.repository.CartRepository
 import com.example.stylishe_commerceapp.domain.repository.FavoriteRepository
+import com.example.stylishe_commerceapp.domain.repository.PaymentRepository
 import com.example.stylishe_commerceapp.domain.repository.ProductRepository
 import com.example.stylishe_commerceapp.domain.repository.UserPreferenceRepository
 import com.example.stylishe_commerceapp.domain.repository.UserSettingRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +50,6 @@ object DataModule {
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
-
     @Provides
     @Singleton
     fun provideUserPreferenceDataStore(@ApplicationContext context: Context): UserPreferencesDataStore {
@@ -135,10 +140,39 @@ fun provideFireBaseDatabase(): FirebaseDatabase {
 
     @Provides
     @Singleton
-
     fun provideUserSettingRepository(database: FirebaseDatabase) : UserSettingRepository{
         return UserSettingRepositoryImplementation(database)
     }
+
+    @Provides
+    @Singleton
+    fun provideCartDataStore(@ApplicationContext context: Context): CartDataStore {
+        return CartDataStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartRepository(cartDataStore: CartDataStore): CartRepository {
+        return CartRepositoryImplementation(cartDataStore)
+    }
+
+
+
+
+    @Provides
+    @Singleton
+    fun provideFirebaseDataStore() : FirebaseFirestore{
+        return FirebaseFirestore.getInstance()
+
+    }
+
+    @Provides
+    @Singleton
+    fun providePaymentRepository(firebaseFirestore: FirebaseFirestore):PaymentRepository {
+        return PaymentRepositoryImplementation(firebaseFirestore)
+    }
+
+
 
 
 }

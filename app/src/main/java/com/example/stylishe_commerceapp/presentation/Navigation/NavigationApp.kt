@@ -13,16 +13,20 @@ import com.example.stylishe_commerceapp.presentation.AuthPage.AuthPage.signuppag
 import com.example.stylishe_commerceapp.presentation.AuthPage.SplashScreen.SplashScreen
 import com.example.stylishe_commerceapp.presentation.AuthPage.onboarding.OnBoardingScreen
 import com.example.stylishe_commerceapp.presentation.HomePage.AllProductScreen
-import com.example.stylishe_commerceapp.presentation.HomePage.HomeScreen
 import com.example.stylishe_commerceapp.presentation.Navigation.Routes
 import com.example.stylishe_commerceapp.presentation.AllCommonProductScreen.AllCommonProductScreen
+import com.example.stylishe_commerceapp.presentation.CartPage.CartScreen
 import com.example.stylishe_commerceapp.presentation.CategoryScreen.CategoryScreen
+import com.example.stylishe_commerceapp.presentation.CheckOutPage.PaymentScreen
 import com.example.stylishe_commerceapp.presentation.Components.HomeComponents.HomePage
+import com.example.stylishe_commerceapp.presentation.CheckOutPage.ConfirmationScreen
+import com.example.stylishe_commerceapp.presentation.CheckOutPage.DeliveryScreen
 import com.example.stylishe_commerceapp.presentation.Favorite.FavoritePage
 import com.example.stylishe_commerceapp.presentation.ProductDetailsScreen.ProductDetailsScreen
 import com.example.stylishe_commerceapp.presentation.SearchScreen.SearchScreen
 import com.example.stylishe_commerceapp.presentation.SettingScreen.SettingScreen
 import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
+import com.example.stylishe_commerceapp.presentation.ViewModel.CartViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.ProductViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.SettingVIewModel
@@ -33,14 +37,18 @@ fun NavigationApp() {
     val context = LocalContext.current
 
 
+
     val viewModel: AuthViewModel = viewModel()
     val productViewModel: ProductViewModel = viewModel()
     val favoriteViewModel: FavoriteViewModel=viewModel()
     val settingViewModel: SettingVIewModel = viewModel()
+    val cartViewModel: CartViewModel =viewModel()
 
     val userPreferencesViewModel: UserPreferencesViewModel = viewModel()
 
     val navController = rememberNavController()
+
+
     NavHost(navController = navController, startDestination = Routes.Splash) {
         composable<Routes.Splash> {
             SplashScreen(navController, userPreferencesViewModel)
@@ -100,6 +108,22 @@ fun NavigationApp() {
 
         composable<Routes.SettingScreen> {
             SettingScreen(navController,settingViewModel)
+        }
+
+        composable <Routes.CartScreen>{
+            CartScreen(navController,cartViewModel)
+
+        }
+        composable <Routes.PaymentScreen>{
+            PaymentScreen(cartViewModel,navController)
+        }
+        composable <Routes.ConformationScreen>{backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.ConformationScreen>()
+            ConfirmationScreen(navController,args.status?:"")
+
+        }
+        composable<Routes.DeliveryScreen>{
+            DeliveryScreen(navController)
         }
 
     }
