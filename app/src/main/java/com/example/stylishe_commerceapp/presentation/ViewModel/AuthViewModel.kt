@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.domain.usecase.LoginUseCase
+import com.example.stylishe_commerceapp.domain.usecase.LogoutUseCase
 import com.example.stylishe_commerceapp.domain.usecase.SetUserPreferenceUseCase
 import com.example.stylishe_commerceapp.domain.usecase.SignInWithGoogleUseCase
 import com.example.stylishe_commerceapp.domain.usecase.SignUpUseCase
@@ -21,7 +22,8 @@ class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val signUpUseCase: SignUpUseCase,
     private val setUserPreferencesUseCase: SetUserPreferenceUseCase,
-    private val signInWithGoogleUseCase: SignInWithGoogleUseCase
+    private val signInWithGoogleUseCase: SignInWithGoogleUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow<Result<String>>(Result.Idle)
@@ -67,6 +69,13 @@ class AuthViewModel @Inject constructor(
 
         }
 
+    }
+    fun logout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            logoutUseCase()
+            setUserPreferencesUseCase.setLoggedIn(false)
+            setUserPreferencesUseCase.setFirstTimeLogin(true)
+        }
     }
 
 

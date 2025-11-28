@@ -28,7 +28,7 @@ import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 
 
 @Composable
-fun SaveButton(settingViewModel: SettingVIewModel,onClicked:()-> Unit){
+fun SaveButton(enabled: Boolean,settingViewModel: SettingVIewModel,onClicked:()-> Unit){
  val state by settingViewModel.state.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(state.error) {
@@ -43,7 +43,8 @@ fun SaveButton(settingViewModel: SettingVIewModel,onClicked:()-> Unit){
         modifier = Modifier.fillMaxWidth().padding(16.dp)
             .size(size=54.dp),
         shape = RoundedCornerShape(4.dp),
-        colors = ButtonDefaults.buttonColors(colorResource(R.color.Crimson))
+        colors = ButtonDefaults.buttonColors(colorResource(R.color.Crimson)),
+        enabled = enabled
     ) {
         if(state.isSaving){
             CircularProgressIndicator(color = Color.White)

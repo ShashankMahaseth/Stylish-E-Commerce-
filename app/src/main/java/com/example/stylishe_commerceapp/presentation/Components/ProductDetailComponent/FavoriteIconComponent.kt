@@ -1,5 +1,6 @@
 package com.example.stylishe_commerceapp.presentation.Components.ProductDetailComponent
 
+import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -11,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.data.remote.Product
@@ -18,13 +20,16 @@ import com.example.stylishe_commerceapp.presentation.ViewModel.FavoriteViewModel
 
 @Composable
 fun FavoriteIcon(favoriteViewModel: FavoriteViewModel,product: Product){
+    val context = LocalContext.current
     val state by favoriteViewModel.state.collectAsState()
     val isFavorite = state.filteredProducts.contains(product)//contains is boolean
     IconButton(onClick = {
     if(isFavorite){
         favoriteViewModel.removeFavoriteProduct(product.id)
+        Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show()
     }else{
         favoriteViewModel.addFavoriteProduct(product)
+        Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show()
     }
 
     }) {

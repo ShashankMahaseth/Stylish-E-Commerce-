@@ -107,7 +107,7 @@ fun NavigationApp() {
         }
 
         composable<Routes.SettingScreen> {
-            SettingScreen(navController,settingViewModel)
+            SettingScreen(navController,settingViewModel,viewModel)
         }
 
         composable <Routes.CartScreen>{

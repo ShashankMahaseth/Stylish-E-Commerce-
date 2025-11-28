@@ -252,12 +252,14 @@ fun AuthScreen(
                         if (!isSignUp) {
                             if (username.isNotBlank() && inputPassword.isNotBlank()) {
                                 authViewModel.login(username, inputPassword)
+                                Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                             }
                         } else {
 
                             if (inputPassword == confirmPassword) {
                                 if (username.isNotBlank() && inputPassword.isNotBlank() && confirmPassword.isNotBlank()) {
                                     authViewModel.signUp(username, inputPassword)
+                                    Toast.makeText(context, "SignUp Successful", Toast.LENGTH_SHORT).show()
                                 }
                             } else {
 

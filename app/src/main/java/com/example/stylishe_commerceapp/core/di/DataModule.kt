@@ -101,8 +101,8 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
-        return AuthRepositoryImplementation(firebaseAuth)
+    fun provideAuthRepository(firebaseAuth: FirebaseAuth,@ApplicationContext context: Context): AuthRepository {
+        return AuthRepositoryImplementation(firebaseAuth,context)
     }
     @Provides
     @Singleton

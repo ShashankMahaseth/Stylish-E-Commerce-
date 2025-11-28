@@ -1,28 +1,44 @@
 package com.example.stylishe_commerceapp.presentation.SettingScreen
 
-import android.net.Uri
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.domain.model.UserProfile
@@ -32,15 +48,18 @@ import com.example.stylishe_commerceapp.presentation.Components.SettingComponent
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.ProfileComponent
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.SaveButton
 import com.example.stylishe_commerceapp.presentation.Components.SettingComponent.SettingTopAppBar
+import com.example.stylishe_commerceapp.presentation.Navigation.Routes
+import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
 import com.example.stylishe_commerceapp.presentation.ViewModel.SettingVIewModel
 import com.example.stylishe_commerceapp.presentation.common.FailureComponent
 import com.example.stylishe_commerceapp.presentation.common.LoadingIndicator
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import kotlinx.coroutines.delay
 
 @Composable
-fun SettingScreen(navController: NavController,
-                  settingViewModel: SettingVIewModel
+fun SettingScreen(
+    navController: NavController,
+    settingViewModel: SettingVIewModel,
+    authViewModel: AuthViewModel
 ) {
     val context = LocalContext.current
     val settingState by settingViewModel.state.collectAsState()
@@ -51,6 +70,10 @@ fun SettingScreen(navController: NavController,
     var state by remember { mutableStateOf("") }
     var country by remember { mutableStateOf("") }
     var upiId by remember { mutableStateOf("") }
+    var scroll by remember { mutableStateOf(true) }
+    var alpha by remember { mutableFloatStateOf(1f) }
+    var popUpMessage by remember { mutableStateOf(false) }
+
 
 
 
@@ -121,6 +144,7 @@ fun SettingScreen(navController: NavController,
             settingState.isLoading -> {
                 LoadingIndicator()
             }
+
             settingState.error != null -> {
                 FailureComponent {
                     settingViewModel.loadUserData()
@@ -128,18 +152,24 @@ fun SettingScreen(navController: NavController,
                 }
             }
 
-            else-> {
+            else -> {
 
 
                 Box(
                     modifier = Modifier
                         .padding(innerPadding)
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+
+
                 ) {
+
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(16.dp)
+                            .alpha(if(!popUpMessage) alpha else 0.3f),
+                        userScrollEnabled = scroll
                     ) {
                         item {
                             Column {
@@ -189,7 +219,8 @@ fun SettingScreen(navController: NavController,
                                     ) {
                                     upiId = it
                                 }
-                                SaveButton(settingViewModel) {
+                                SaveButton(enabled = !popUpMessage,settingViewModel = settingViewModel) {
+
 
                                     val allFilled = name.isNotEmpty() &&
                                             pinCode.isNotEmpty() &&
@@ -247,10 +278,93 @@ fun SettingScreen(navController: NavController,
                                     )
                                     settingViewModel.updateUserProfile(userProfile)
                                 }
+                                Divider(modifier = Modifier.padding(32.dp))
+                                Button(
+                                    onClick = {
+                                        scroll =false
+                                        popUpMessage=true
+                                    },
+                                    colors = ButtonDefaults.textButtonColors(colorResource(R.color.Maroon)),
+                                    shape = RoundedCornerShape(4.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.5f)
+                                        .align(Alignment.CenterHorizontally)
+                                ) {
+                                    Text(
+                                        text = "Logout",
+                                        color = Color.White
+                                    )
+                                }
 
                             }
                         }
 
+                    }
+                    if(popUpMessage) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth(0.80f)
+                                .height(250.dp)
+                                .shadow(6.dp, shape = RoundedCornerShape(8.dp)),
+                            colors = CardDefaults.cardColors(colorResource(R.color.WhiteSmoke))
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column {
+                                    Text(
+                                        text = "Confirm to Logout?",
+                                        fontWeight = FontWeight.SemiBold,
+                                        fontStyle = FontStyle.Italic,
+                                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                                        fontSize = 24.sp
+                                    )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceEvenly
+                                    ) {
+                                        Button(
+                                            onClick = {
+                                                scroll = true
+                                                popUpMessage=false
+                                            },
+                                            colors = ButtonDefaults.buttonColors(colorResource(R.color.DodgerBlue)),
+                                            shape = RoundedCornerShape(4.dp)
+                                        ) {
+                                            Text(
+                                                text = "Decline"
+                                            )
+                                        }
+                                        Button(
+                                            onClick = {
+                                                authViewModel.logout()
+                                               navController.navigate(Routes.Onboarding){
+                                                   popUpTo(Routes.Splash) {
+                                                       inclusive = true
+                                                   }
+
+                                               }
+                                                Toast.makeText(context, "Logged Out Successfully", Toast.LENGTH_SHORT)
+                                                    .show()
+
+                                                      },
+                                            colors = ButtonDefaults.buttonColors(colorResource(R.color.Red)),
+                                            shape = RoundedCornerShape(4.dp)
+                                        ) {
+                                            Text(
+                                                text = "Confirm"
+                                            )
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
             }
