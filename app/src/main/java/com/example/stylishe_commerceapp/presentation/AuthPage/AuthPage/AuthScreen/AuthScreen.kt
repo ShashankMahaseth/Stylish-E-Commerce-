@@ -42,7 +42,6 @@ import com.example.stylishe_commerceapp.R
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.AuthButton.AuthButton
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.LoginIcon.LoginIcon
-import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.LoginIcon.LoginIconImage
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.TextField.TextFieldItem
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetPasswordButton.ForgetPasswordButton
 import com.example.stylishe_commerceapp.presentation.Components.AuthComponents.forgetScreen.forgetText.ForgotText
@@ -117,12 +116,12 @@ fun AuthScreen(
         when (authState1) {
             is Result.Success -> {
                 if (!isSignUp) {
-                    // Login successful → go Home
+                    // Login successful  go Home
                     navController.navigate(Routes.Home) {
                         popUpTo(Routes.Onboarding) { inclusive = true }
                     }
                 } else {
-                    // Signup successful → go to Login
+                    // Signup successful go to Login
                     navController.navigate(Routes.Login) {
                         popUpTo(Routes.SignUp) { inclusive = true }
                     }
@@ -288,11 +287,12 @@ fun AuthScreen(
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     LoginIcon(
-                        onClicked = {iconId->
-                            if(iconId==R.drawable.google) {
+                        onClicked = { iconId ->
+                            if (iconId == R.drawable.google) {
 
 
-                                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                val gso =
+                                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                         .requestIdToken(context.getString(R.string.default_web_client_id))
                                         .build()
 
@@ -300,7 +300,6 @@ fun AuthScreen(
                                 val signInIntent = googleSignInClient.signInIntent
                                 googleSignInLauncher.launch(signInIntent)
                             }
-
 
 
                         },
