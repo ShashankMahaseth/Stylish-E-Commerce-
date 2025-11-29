@@ -9,8 +9,7 @@ import com.example.stylishe_commerceapp.presentation.ViewModel.AuthViewModel
 fun ForgotPage(navController: NavHostController,authViewModel: AuthViewModel) {
     AuthScreen(
         isSignUp = false,
-        authText = "Submit"
-        ,
+        authText = "Submit",
         authText2 ="forgot",
         topText1 = "Forgot",
         topText2 = "Password?",

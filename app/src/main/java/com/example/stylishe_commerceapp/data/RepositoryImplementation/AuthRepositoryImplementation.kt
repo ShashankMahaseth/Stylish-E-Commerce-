@@ -28,7 +28,7 @@ class  AuthRepositoryImplementation @Inject constructor(
 
     override suspend fun signup(email: String, password: String): Result<String> {
         return try {
-            firebaseAuth.signInWithEmailAndPassword(email,password).await()
+            firebaseAuth.createUserWithEmailAndPassword(email,password).await()
 
             Result.Success("Successful")
         }catch (e: Exception){
@@ -47,6 +47,15 @@ class  AuthRepositoryImplementation @Inject constructor(
 
             Result.Failure(e.localizedMessage ?:"Unknown Error")
 
+        }
+    }
+
+    override suspend fun forgot(email: String): Result<String> {
+        try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            return Result.Success("Email Sent")
+        } catch (e: Exception) {
+            return Result.Failure(e.localizedMessage ?: "Unknown Error")
         }
     }
 

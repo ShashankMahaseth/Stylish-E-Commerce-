@@ -115,23 +115,34 @@ fun AuthScreen(
     LaunchedEffect(authState1) {
         when (authState1) {
             is Result.Success -> {
+                if (isForgot) {
+                    Toast.makeText(context, "Password Reset Email Sent ", Toast.LENGTH_LONG).show()
+                    errorMessage = ""  // clear error
+                    authViewModel.resetState()
+                    return@LaunchedEffect
+                }
                 if (!isSignUp) {
                     // Login successful  go Home
                     navController.navigate(Routes.Home) {
                         popUpTo(Routes.Onboarding) { inclusive = true }
                     }
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                 } else {
                     // Signup successful go to Login
                     navController.navigate(Routes.Login) {
                         popUpTo(Routes.SignUp) { inclusive = true }
                     }
+                    Toast.makeText(context, "Signup Successful", Toast.LENGTH_SHORT).show()
 
                 }
                 authViewModel.resetState()
             }
 
+
             is Result.Failure -> {
                 errorMessage = (authState1 as Result.Failure).message
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+
             }
 
             else -> {}
@@ -252,20 +263,24 @@ fun AuthScreen(
                         if (!isSignUp) {
                             if (username.isNotBlank() && inputPassword.isNotBlank()) {
                                 authViewModel.login(username, inputPassword)
-                                Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+
                             }
                         } else {
 
                             if (inputPassword == confirmPassword) {
                                 if (username.isNotBlank() && inputPassword.isNotBlank() && confirmPassword.isNotBlank()) {
                                     authViewModel.signUp(username, inputPassword)
-                                    Toast.makeText(context, "SignUp Successful", Toast.LENGTH_SHORT).show()
+
                                 }
                             } else {
 
                                 isMatchedPassword = !isMatchedPassword
 
                             }
+                        }
+                        if(isForgot){
+                            authViewModel.forgot(username)
+                            Toast.makeText(context, "Email Sent", Toast.LENGTH_SHORT).show()
 
                         }
                     }, text = authText,

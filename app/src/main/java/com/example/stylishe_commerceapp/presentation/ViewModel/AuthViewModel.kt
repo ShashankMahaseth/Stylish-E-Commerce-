@@ -4,6 +4,7 @@ package com.example.stylishe_commerceapp.presentation.ViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stylishe_commerceapp.core.utils.Result
+import com.example.stylishe_commerceapp.domain.usecase.ForgotUseCase
 import com.example.stylishe_commerceapp.domain.usecase.LoginUseCase
 import com.example.stylishe_commerceapp.domain.usecase.LogoutUseCase
 import com.example.stylishe_commerceapp.domain.usecase.SetUserPreferenceUseCase
@@ -23,7 +24,8 @@ class AuthViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
     private val setUserPreferencesUseCase: SetUserPreferenceUseCase,
     private val signInWithGoogleUseCase: SignInWithGoogleUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val forgotUseCase: ForgotUseCase
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow<Result<String>>(Result.Idle)
@@ -59,10 +61,10 @@ class AuthViewModel @Inject constructor(
     fun signInWithGoogle(account: GoogleSignInAccount) {
         _authState.value = Result.Loading
         viewModelScope.launch(Dispatchers.IO) {
-          val result = signInWithGoogleUseCase(account)
-            _authState.value =result
+            val result = signInWithGoogleUseCase(account)
+            _authState.value = result
 
-            if(result is Result.Success) {
+            if (result is Result.Success) {
                 setUserPreferencesUseCase.setFirstTimeLogin(false)
                 setUserPreferencesUseCase.setLoggedIn(true)
             }
@@ -70,6 +72,16 @@ class AuthViewModel @Inject constructor(
         }
 
     }
+
+    fun forgot(email: String) {
+        _authState.value = Result.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = forgotUseCase(email)
+            _authState.value = result
+        }
+
+    }
+
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             logoutUseCase()
@@ -77,6 +89,4 @@ class AuthViewModel @Inject constructor(
             setUserPreferencesUseCase.setFirstTimeLogin(true)
         }
     }
-
-
 }
