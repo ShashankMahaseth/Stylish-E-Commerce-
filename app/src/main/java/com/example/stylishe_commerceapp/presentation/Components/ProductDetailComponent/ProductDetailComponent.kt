@@ -166,6 +166,7 @@ fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel
         )
         Spacer(modifier = Modifier.height(8.dp))
 
+        Spacer(modifier = Modifier.height(16.dp))
         AddToCartComponent(cartViewModel = cartViewModel,product = product)
 
 
