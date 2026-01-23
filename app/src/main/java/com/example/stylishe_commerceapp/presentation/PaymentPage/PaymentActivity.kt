@@ -27,8 +27,6 @@ class PaymentActivity : ComponentActivity(), PaymentResultListener {
 
     override fun onPaymentSuccess(paymentId: String) {
         viewModel.setPaymentResult(Result.Success(paymentId))
-
-
         val resultIntent = Intent().apply {
             putExtra("status", "success")
             putExtra("paymentId", paymentId)

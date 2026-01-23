@@ -19,16 +19,15 @@ class PaymentViewModel @Inject constructor(
     private val paymentRepository: PaymentRepository
 ) : ViewModel() {
 
-    // State should be StateFlow not normal Flow
+
     private val _paymentState = MutableStateFlow<Result<String>>(Result.Loading)
     val paymentState = _paymentState.asStateFlow()
 
-    //Remove wrong activity reference and use passed activity
+
     fun payNow(amount: Long, activity: Activity) {
         viewModelScope.launch {
             paymentRepository.startPayment(amount, activity)
                 .collectLatest { result ->
-
                     _paymentState.value = result
                 }
         }

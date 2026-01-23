@@ -1,14 +1,11 @@
 package com.example.stylishe_commerceapp.presentation.ViewModel
 
-import android.content.Context
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stylishe_commerceapp.core.utils.Result
 import com.example.stylishe_commerceapp.domain.model.UserProfile
 import com.example.stylishe_commerceapp.domain.repository.UserSettingRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,10 +31,10 @@ class SettingVIewModel @Inject constructor(
     private val _state = MutableStateFlow(SettingState())
     val state = _state.asStateFlow()
 
-init {
-    loadUserProfile()
-    loadUserData()
-}
+    init {
+        loadUserProfile()
+        loadUserData()
+    }
 
     fun loadUserData() {
         val currentUser = firebaseAuth.currentUser
@@ -50,35 +47,38 @@ init {
         )
 
     }
+
     fun loadUserProfile() {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true, error = null)
 
             val userId = firebaseAuth.currentUser?.uid ?: return@launch
 
-            userSettingRepository.getUserProfile(userId).collect { result ->//collect will receive updates whenever profile changes in Firebase
-                when (result) {
-                    is Result.Success -> {
-                        _state.value = _state.value.copy(
-                            userProfile = result.data,
-                            isLoading = false,
-                            error = null
+            userSettingRepository.getUserProfile(userId)
+                .collect { result ->//collect will receive updates whenever profile changes in Firebase
+                    when (result) {
+                        is Result.Success -> {
+                            _state.value = _state.value.copy(
+                                userProfile = result.data,
+                                isLoading = false,
+                                error = null
 
-                        )
-                    }
-                    is Result.Failure -> {
-                        _state.value = _state.value.copy(
-                            error = result.message,
-                            isLoading = false,
+                            )
+                        }
 
-                        )
+                        is Result.Failure -> {
+                            _state.value = _state.value.copy(
+                                error = result.message,
+                                isLoading = false,
+
+                                )
+                        }
+
+                        else -> {}
                     }
-                    else -> {}
                 }
-            }
         }
     }
-
 
 
     fun updateUserProfile(userProfile: UserProfile) {
@@ -96,13 +96,14 @@ init {
                 _state.value = _state.value.copy(isSaving = true, saveSuccess = false, error = null)
 
                 val profileWithUserId = userProfile.copy(userId = userId)
-                when (val result = userSettingRepository.saveUserProfile(userProfile=profileWithUserId)) {
+                when (val result =
+                    userSettingRepository.saveUserProfile(userProfile = profileWithUserId)) {
                     is Result.Success -> {
                         _state.value = _state.value.copy(
                             userProfile = userProfile,
                             isSaving = false,
                             saveSuccess = true,
-
+                            error = null,
                             isLoading = false
                         )
 
@@ -140,16 +141,14 @@ init {
 
         }
     }
+
     fun resetSaveSuccess() {
         _state.value = _state.value.copy(saveSuccess = false)
     }
+
     fun clearError() {
         _state.value = _state.value.copy(error = null)
     }
-
-
-
-
 
 
 }

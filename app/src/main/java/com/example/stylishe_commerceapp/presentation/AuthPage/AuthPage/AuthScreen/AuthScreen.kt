@@ -79,7 +79,6 @@ fun AuthScreen(
 
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
-
         ) { result ->
         when (result.resultCode) {
             Activity.RESULT_OK -> {
@@ -308,8 +307,7 @@ fun AuthScreen(
                             if (iconId == R.drawable.google) {
 
 
-                                val gso =
-                                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                         .requestIdToken(context.getString(R.string.default_web_client_id))
                                         .build()
 

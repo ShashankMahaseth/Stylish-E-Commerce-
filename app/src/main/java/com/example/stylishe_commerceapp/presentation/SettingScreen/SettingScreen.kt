@@ -347,6 +347,7 @@ fun SettingScreen(
                                                        inclusive = true
                                                    }
 
+
                                                }
                                                 Toast.makeText(context, "Logged Out Successfully", Toast.LENGTH_SHORT)
                                                     .show()

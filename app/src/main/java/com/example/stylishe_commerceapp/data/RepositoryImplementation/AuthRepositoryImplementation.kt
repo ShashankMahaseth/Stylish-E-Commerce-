@@ -66,10 +66,5 @@ class  AuthRepositoryImplementation @Inject constructor(
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
         )
         googleClient.signOut()
-
-
     }
-
-
-
 }

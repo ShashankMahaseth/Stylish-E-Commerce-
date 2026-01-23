@@ -18,6 +18,4 @@ class UserPreferenceImplementation @Inject constructor(private val userPreferenc
         userPreferencesDataStore.setLoginIn(isLoggedIn)
     }
 
-
-
-}
+    }

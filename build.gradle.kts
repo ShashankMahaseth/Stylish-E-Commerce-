@@ -6,6 +6,4 @@ plugins {
     alias(libs.plugins.ksp) apply false // <-- Add this line
     id("com.google.dagger.hilt.android") version "2.57.2" apply false
     alias(libs.plugins.google.gms.google.services) apply false
-
-
 }

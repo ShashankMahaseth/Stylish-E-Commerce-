@@ -163,9 +163,7 @@ fun provideFireBaseDatabase(): FirebaseDatabase {
     @Singleton
     fun provideFirebaseDataStore() : FirebaseFirestore{
         return FirebaseFirestore.getInstance()
-
     }
-
     @Provides
     @Singleton
     fun providePaymentRepository(firebaseFirestore: FirebaseFirestore):PaymentRepository {

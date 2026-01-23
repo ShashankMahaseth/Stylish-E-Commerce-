@@ -54,8 +54,5 @@ fun HomeSearchBar(value: String, onValueChanged:(String)-> Unit, readonly: Boole
             disabledLeadingIconColor =  colorResource(R.color.silver),
             disabledIndicatorColor =  colorResource(R.color.Snow)
             ),
-
-
-
         )
 }

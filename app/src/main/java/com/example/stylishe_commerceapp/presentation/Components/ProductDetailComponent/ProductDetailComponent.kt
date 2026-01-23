@@ -55,7 +55,6 @@ fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel
     val images = product.images?.takeIf { it.isNotEmpty() } ?: emptyList()
 
     val pagerState = rememberPagerState(pageCount = { images.size })
-    0
 
     LaunchedEffect(pagerState.pageCount) {
         while (true) {
@@ -78,7 +77,6 @@ fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-
                     .fillMaxWidth()
                     .size(350.dp)
                     .clip(shape = RoundedCornerShape(8.dp))
@@ -142,15 +140,14 @@ fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel
         Row {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "₹ $originalPrice",
+                text = "₹$originalPrice",
                 fontWeight = FontWeight.SemiBold,
                 color = colorResource(R.color.silver),
                 textDecoration = TextDecoration.LineThrough,
                 fontSize = 20.sp,
-
                 )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
+             Spacer(modifier = Modifier.width(8.dp))
+             Text(
                 text = "₹ $originalDiscountedPrice($discount% Off)",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -168,10 +165,6 @@ fun ProductDetailComponent(product: Product,favoriteViewModel: FavoriteViewModel
 
         Spacer(modifier = Modifier.height(16.dp))
         AddToCartComponent(cartViewModel = cartViewModel,product = product)
-
-
-
-
 
     }
 }

@@ -22,8 +22,7 @@ class CartDataStore(private val context: Context) {
         ignoreUnknownKeys = true
         isLenient = true
     }
-    val cartItems: Flow<List<CartItem>> =
-        context.cartDataStore.data.map { preferences ->//Every time DataStore updates, the Flow sends the new value.
+    val cartItems: Flow<List<CartItem>> = context.cartDataStore.data.map { preferences ->//Every time DataStore updates, the Flow sends the new value.
             val itemJson = preferences[CART_ITEMS]
                 ?: "[]"//preferences every emission gives us current stored values
             try {
@@ -41,8 +40,7 @@ class CartDataStore(private val context: Context) {
             } catch (e: Exception) {
                 emptyList()
             }
-            val existingItemIndex =
-                currentItems.indexOfFirst { it.product.id == product.id }//check if product already exist
+            val existingItemIndex = currentItems.indexOfFirst { it.product.id == product.id }//check if product already exist
 
             val updateItems = if (existingItemIndex != -1) {
                 currentItems.toMutableList()
